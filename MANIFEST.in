@@ -4,7 +4,7 @@ include requirements.txt
 recursive-include src/vine_fep *.py
 recursive-include src/maple_fep *.py
 recursive-include docs *.md *.rst *.txt
-recursive-include examples *.py
+prune examples
 exclude src/vine_fep/**/__pycache__
 exclude src/vine_fep/**/*.pyc
 exclude **/__pycache__
