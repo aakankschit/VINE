@@ -1,12 +1,12 @@
 Tutorials
 =========
 
-This section provides step-by-step tutorials for common MAPLE workflows, emphasizing the dataset-centric architecture.
+This section provides step-by-step tutorials for common VINE workflows, emphasizing the dataset-centric architecture.
 
 Tutorial 1: Understanding the Dataset-Model Workflow
 -----------------------------------------------------
 
-This tutorial introduces MAPLE's core architecture where the ``FEPDataset`` object serves as the central hub.
+This tutorial introduces VINE's core architecture where the ``FEPDataset`` object serves as the central hub.
 
 The Central Concept
 ~~~~~~~~~~~~~~~~~~~
@@ -14,7 +14,7 @@ The Central Concept
 .. code-block:: text
 
    +============================================================================+
-   |              MAPLE's DATASET-CENTRIC ARCHITECTURE                          |
+   |              VINE's DATASET-CENTRIC ARCHITECTURE                          |
    +============================================================================+
    
    The FEPDataset is the central hub:
@@ -48,7 +48,7 @@ Step 1: Create Your Dataset
 
 .. code-block:: python
 
-   from maple.dataset import FEPDataset
+   from vine_fep.dataset import FEPDataset
    
    # Load from benchmark (easiest way to start)
    dataset = FEPDataset(dataset_name="cdk8", sampling_time="5ns")
@@ -65,7 +65,7 @@ Step 2: Train a Model and Add Predictions
 
 .. code-block:: python
 
-   from maple.models import VariationalEstimator, VariationalEstimatorConfig, PriorType, GuideType
+   from vine_fep.models import VariationalEstimator, VariationalEstimatorConfig, PriorType, GuideType
 
    # Configure MAP inference
    config = VariationalEstimatorConfig(
@@ -95,7 +95,7 @@ Step 3: Add More Models
 
 .. code-block:: python
 
-   from maple.models import GaussianMixtureVI, GaussianMixtureVIConfig
+   from vine_fep.models import GaussianMixtureVI, GaussianMixtureVIConfig
 
    # Train GMVI
    gmvi_config = GaussianMixtureVIConfig(prior_std=5.0, outlier_prob=0.2)
@@ -116,7 +116,7 @@ Step 4: Compare Models from Dataset
 
 .. code-block:: python
 
-   from maple.graph_analysis import compute_simple_statistics
+   from vine_fep.graph_analysis import compute_simple_statistics
    
    exp = dataset.dataset_nodes['Exp. DeltaG'].values
    
@@ -136,7 +136,7 @@ Step 1: Load and Inspect Data
 
 .. code-block:: python
 
-   from maple.dataset import FEPDataset
+   from vine_fep.dataset import FEPDataset
    
    # Load benchmark dataset
    dataset = FEPDataset(dataset_name="cdk8", sampling_time="5ns")
@@ -157,7 +157,7 @@ Step 2: Train Multiple Inference Methods
 
 .. code-block:: python
 
-   from maple.models import (
+   from vine_fep.models import (
        VariationalEstimator, VariationalEstimatorConfig,
        GaussianMixtureVI, GaussianMixtureVIConfig,
        PriorType, GuideType
@@ -212,7 +212,7 @@ Step 3: Comprehensive Performance Analysis
 
 .. code-block:: python
 
-   from maple.graph_analysis import (
+   from vine_fep.graph_analysis import (
        compute_simple_statistics,
        compute_bootstrap_statistics
    )
@@ -321,7 +321,7 @@ Step 5: Publication-Ready Visualization
 Tutorial 3: Working with Your Own Data
 --------------------------------------
 
-This tutorial shows how to use MAPLE with your own FEP data.
+This tutorial shows how to use VINE with your own FEP data.
 
 Step 1: Prepare Your Data
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -355,7 +355,7 @@ Step 2: Create Dataset
 
 .. code-block:: python
 
-   from maple.dataset import FEPDataset
+   from vine_fep.dataset import FEPDataset
    
    dataset = FEPDataset(
        dataset_nodes=nodes_df,
@@ -391,7 +391,7 @@ Step 4: Train and Compare Models
 
 .. code-block:: python
 
-   from maple.models import (
+   from vine_fep.models import (
        VariationalEstimator, VariationalEstimatorConfig,
        GaussianMixtureVI, GaussianMixtureVIConfig,
        PriorType, GuideType
@@ -430,7 +430,7 @@ Variational Inference Uncertainties
 
 .. code-block:: python
 
-   from maple.models import VariationalEstimator, VariationalEstimatorConfig, GuideType
+   from vine_fep.models import VariationalEstimator, VariationalEstimatorConfig, GuideType
 
    # Use AutoNormal guide for VI
    vi_config = VariationalEstimatorConfig(
@@ -453,7 +453,7 @@ GMVI Uncertainties and Outlier Detection
 
 .. code-block:: python
 
-   from maple.models import GaussianMixtureVI, GaussianMixtureVIConfig
+   from vine_fep.models import GaussianMixtureVI, GaussianMixtureVIConfig
 
    gmvi = GaussianMixtureVI(
        dataset=dataset,
@@ -529,13 +529,13 @@ This tutorial shows how to analyze multiple datasets systematically.
 
 .. code-block:: python
 
-   from maple.dataset import FEPDataset
-   from maple.models import (
+   from vine_fep.dataset import FEPDataset
+   from vine_fep.models import (
        VariationalEstimator, VariationalEstimatorConfig,
        GaussianMixtureVI, GaussianMixtureVIConfig,
        PriorType, GuideType
    )
-   from maple.graph_analysis import compute_simple_statistics
+   from vine_fep.graph_analysis import compute_simple_statistics
    import pandas as pd
 
    # Define datasets and configurations
@@ -628,7 +628,7 @@ Summary: Key Patterns to Remember
 .. code-block:: text
 
    +============================================================================+
-   |                    MAPLE WORKFLOW PATTERN                                   |
+   |                    VINE WORKFLOW PATTERN                                   |
    +============================================================================+
    
    1. CREATE DATASET (central hub)

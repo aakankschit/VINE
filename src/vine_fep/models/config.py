@@ -1,7 +1,7 @@
 """
-Configuration classes for MAPLE estimators.
+Configuration classes for VINE estimators.
 
-This module provides configuration classes for different estimator types in MAPLE,
+This module provides configuration classes for different estimator types in VINE,
 including the VariationalEstimator and MixtureVI, with proper validation
 using Pydantic.
 """
@@ -43,7 +43,7 @@ class ErrorDistributionType(str, Enum):
 
 
 class BaseEstimatorConfig(BaseModel, ABC):
-    """Base configuration class for all MAPLE probabilistic estimators"""
+    """Base configuration class for all VINE probabilistic estimators"""
 
     learning_rate: float = Field(
         default=0.001, ge=1e-6, le=1.0, description="Learning rate for optimization"
@@ -380,7 +380,7 @@ class MixtureVIConfig(BaseEstimatorConfig):
         dataset : BaseDataset
             Dataset exposing ``dataset_edges`` / ``dataset_nodes`` with both
             predicted and experimental columns (see
-            :func:`~maple_fep.models.probabilistic.mixture.fitting.residuals_from_dataset`).
+            :func:`~vine_fep.models.probabilistic.mixture.fitting.residuals_from_dataset`).
         K_likelihood, K_prior : int, optional
             Component counts; ``None`` (default) selects from the data.
         random_state : int, optional

@@ -1,7 +1,7 @@
 Interactive Tutorials
 =====================
 
-These interactive tutorials demonstrate MAPLE's capabilities using real benchmark datasets.
+These interactive tutorials demonstrate VINE's capabilities using real benchmark datasets.
 The tutorials are built with `Marimo <https://marimo.io/>`_, a modern reactive Python notebook.
 
 .. note::
@@ -17,7 +17,7 @@ The tutorials are built with `Marimo <https://marimo.io/>`_, a modern reactive P
 Getting Started Tutorial
 ------------------------
 
-This tutorial walks you through the basics of MAPLE:
+This tutorial walks you through the basics of VINE:
 
 - Loading benchmark FEP datasets
 - Understanding the data structure (nodes and edges)
@@ -75,8 +75,8 @@ Source Files
 
 The Marimo notebook source files are available in the repository:
 
-- `getting_started.py <https://github.com/aakankschit/maple-fep/blob/main/docs/tutorials/getting_started.py>`_ - Getting Started Tutorial
-- `model_comparison.py <https://github.com/aakankschit/maple-fep/blob/main/docs/tutorials/model_comparison.py>`_ - Complete Model Comparison Tutorial
+- `getting_started.py <https://github.com/aakankschit/vine-fep/blob/main/docs/tutorials/getting_started.py>`_ - Getting Started Tutorial
+- `model_comparison.py <https://github.com/aakankschit/vine-fep/blob/main/docs/tutorials/model_comparison.py>`_ - Complete Model Comparison Tutorial
 
 
 Running Tutorials Locally
@@ -84,11 +84,11 @@ Running Tutorials Locally
 
 To run tutorials interactively:
 
-1. Install MAPLE with notebook dependencies:
+1. Install VINE with notebook dependencies:
 
    .. code-block:: bash
 
-      pip install maple-fep[notebook]
+      pip install vine-fep[notebook]
 
 2. Navigate to the tutorials directory:
 

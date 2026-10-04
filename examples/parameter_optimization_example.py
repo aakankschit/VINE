@@ -10,10 +10,10 @@ import os
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from maple_fep.dataset.synthetic_dataset import SyntheticFEPDataset
-from maple_fep.models.config import VariationalEstimatorConfig as ModelConfig, PriorType
-from maple_fep.utils import PerformanceTracker
-from maple_fep.utils.parameter_sweep import (ParameterSweep,
+from vine_fep.dataset.synthetic_dataset import SyntheticFEPDataset
+from vine_fep.models.config import VariationalEstimatorConfig as ModelConfig, PriorType
+from vine_fep.utils import PerformanceTracker
+from vine_fep.utils.parameter_sweep import (ParameterSweep,
                                          create_prior_sweep_experiment)
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
@@ -24,7 +24,7 @@ def main_parameter_study():
     Main parameter study demonstrating systematic parameter exploration.
     """
 
-    print("🔬 MAPLE Parameter Optimization Study")
+    print("🔬 VINE Parameter Optimization Study")
     print("=" * 60)
 
     # ============================================================================

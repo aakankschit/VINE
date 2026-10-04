@@ -1,5 +1,5 @@
 """
-Shared GraphData container for MAPLE models.
+Shared GraphData container for VINE models.
 
 This module provides the GraphData dataclass used across all graph-based
 models (VariationalEstimator, GaussianMixtureVI, CycleClosureCorrection, SpectralCorrection).

@@ -1,5 +1,5 @@
 """
-MAPLE Models Package
+VINE Models Package
 
 This package provides estimators for FEP analysis, organized into
 probabilistic (variational inference) and deterministic (closed-form) methods.

@@ -1,7 +1,7 @@
 """
 Unit tests for the dataset modules.
 
-This module tests all dataset classes in the MAPLE package, including
+This module tests all dataset classes in the VINE package, including
 BaseDataset interface compliance, data loading functionality, and
 proper graph data generation for VariationalEstimator compatibility.
 """
@@ -13,10 +13,10 @@ import pandas as pd
 import pytest
 import torch
 
-from maple_fep.dataset.base_dataset import BaseDataset
-from maple_fep.dataset.dataset import FEPDataset
-from maple_fep.dataset.FEP_benchmark_dataset import FEPBenchmarkDataset
-from maple_fep.dataset.synthetic_dataset import SyntheticFEPDataset
+from vine_fep.dataset.base_dataset import BaseDataset
+from vine_fep.dataset.dataset import FEPDataset
+from vine_fep.dataset.FEP_benchmark_dataset import FEPBenchmarkDataset
+from vine_fep.dataset.synthetic_dataset import SyntheticFEPDataset
 
 
 class TestBaseDataset:

@@ -12,10 +12,10 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from maple_fep.models.presets import GMMParams
-from maple_fep.models.config import MixtureVIConfig
-from maple_fep.utils import residuals_from_dataset
-from maple_fep.utils.sklearn_gmm_fitting import (
+from vine_fep.models import GMMParams
+from vine_fep.models.config import MixtureVIConfig
+from vine_fep.utils import residuals_from_dataset
+from vine_fep.utils import (
     GMMSelectionResult,
     fit_gmm_cv,
     fit_sklearn_gmm,

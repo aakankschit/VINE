@@ -1,8 +1,8 @@
 """
-Pytest configuration and shared fixtures for MAPLE tests.
+Pytest configuration and shared fixtures for VINE tests.
 
 This module provides common test fixtures and utilities that can be used
-across all test modules in the MAPLE package.
+across all test modules in the VINE package.
 """
 
 import shutil

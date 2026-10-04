@@ -102,7 +102,7 @@ Model Configuration:
 
 class PerformanceTracker:
     """
-    Comprehensive performance tracking system for MAPLE models.
+    Comprehensive performance tracking system for VINE models.
 
     This class provides functionality to:
     - Track model performance across multiple runs

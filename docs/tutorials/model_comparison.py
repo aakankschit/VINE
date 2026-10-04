@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.10"
 # dependencies = [
-#     "maple-fep",
+#     "vine-fep",
 #     "marimo",
 #     "matplotlib",
 #     "pandas",
@@ -28,9 +28,9 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    # MAPLE-FEP: Complete Model Comparison Tutorial
+    # VINE-FEP: Complete Model Comparison Tutorial
 
-    **MAPLE (Maximum A Posteriori Learning of Energies)** provides multiple methods for correcting thermodynamic inconsistencies in Free Energy Perturbation (FEP) graphs. This tutorial demonstrates **all available correction models** on a single benchmark dataset and compares their performance.
+    **VINE** provides multiple methods for correcting thermodynamic inconsistencies in Free Energy Perturbation (FEP) graphs. This tutorial demonstrates **all available correction models** on a single benchmark dataset and compares their performance.
 
     ## What you will learn
 
@@ -47,7 +47,7 @@ def _(mo):
 
     ## Background
 
-    FEP calculations predict relative binding free energy differences (ΔΔG) between ligand pairs. These relative measurements form a **graph** where nodes are ligands and edges are perturbations. Due to finite sampling, the ΔΔG values are noisy and thermodynamically inconsistent (cycle closure errors ≠ 0). MAPLE corrects these inconsistencies to produce improved estimates of absolute binding free energies (ΔG).
+    FEP calculations predict relative binding free energy differences (ΔΔG) between ligand pairs. These relative measurements form a **graph** where nodes are ligands and edges are perturbations. Due to finite sampling, the ΔΔG values are noisy and thermodynamically inconsistent (cycle closure errors ≠ 0). VINE corrects these inconsistencies to produce improved estimates of absolute binding free energies (ΔG).
     """)
     return
 
@@ -57,11 +57,11 @@ def _(mo):
     mo.md(r"""
     ## 1. Setup and Imports
 
-    We import all necessary MAPLE modules. The package is organized into three main subpackages:
+    We import all necessary VINE modules. The package is organized into three main subpackages:
 
-    - `maple_fep.dataset` — Data loading and management
-    - `maple_fep.models` — Probabilistic and deterministic estimators
-    - `maple_fep.graph_analysis` — Plotting, statistics, and graph utilities
+    - `vine_fep.dataset` — Data loading and management
+    - `vine_fep.models` — Probabilistic and deterministic estimators
+    - `vine_fep.graph_analysis` — Plotting, statistics, and graph utilities
     """)
     return
 
@@ -78,10 +78,10 @@ def _():
     import pyro
 
     # Dataset
-    from maple_fep.dataset import FEPDataset, FEPBenchmarkDataset
+    from vine_fep.dataset import FEPDataset, FEPBenchmarkDataset
 
     # Models — Probabilistic
-    from maple_fep.models import (
+    from vine_fep.models import (
         VariationalEstimator,
         VariationalEstimatorConfig,
         GaussianMixtureVI,
@@ -91,7 +91,7 @@ def _():
     )
 
     # Models — Deterministic
-    from maple_fep.models import (
+    from vine_fep.models import (
         CycleClosureCorrection,
         CycleClosureCorrectionConfig,
         SpectralCorrection,
@@ -99,7 +99,7 @@ def _():
     )
 
     # Graph analysis and plotting
-    from maple_fep.graph_analysis import (
+    from vine_fep.graph_analysis import (
         plot_dataset_DGs,
         plot_dataset_DDGs,
         plot_model_comparison_bars,
@@ -141,7 +141,7 @@ def _(mo):
     mo.md(r"""
     ## 2. Load Benchmark Data
 
-    MAPLE ships with 8 public FEP benchmark datasets from Schindler *et al.* Each can be loaded at two sampling times (5 ns or 20 ns).
+    VINE ships with 8 public FEP benchmark datasets from Schindler *et al.* Each can be loaded at two sampling times (5 ns or 20 ns).
 
     We use the **CDK8 (Cyclin-dependent kinase 8)** dataset at **5 ns** sampling — a moderately sized perturbation graph that illustrates model differences clearly.
     """)
@@ -251,7 +251,7 @@ def _(mo):
 
     We now apply all six correction methods. Each model reads graph data from the dataset, fits its parameters, and writes predictions back to the dataset DataFrames.
 
-    MAPLE's **dataset-centric design** means all predictions accumulate as new columns on the same `dataset` object, making comparison straightforward.
+    VINE's **dataset-centric design** means all predictions accumulate as new columns on the same `dataset` object, making comparison straightforward.
 
     ### Probabilistic Models
 
@@ -678,7 +678,7 @@ def _(mo):
 
     ## 7. Graph Cycle Analysis
 
-    Understanding cycle closure errors reveals where the FEP graph is thermodynamically inconsistent. MAPLE provides tools to analyze cycles and visualize how each model corrects them.
+    Understanding cycle closure errors reveals where the FEP graph is thermodynamically inconsistent. VINE provides tools to analyze cycles and visualize how each model corrects them.
 
     ### 7a. Cycle closure errors before and after correction
     """)

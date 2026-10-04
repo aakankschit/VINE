@@ -22,9 +22,9 @@ from time import time
 
 import numpy as np
 
-from maple_fep.dataset import SyntheticFEPDataset
-from maple_fep.models import MixtureVI, MixtureVIConfig, get_preset, list_presets
-from maple_fep.utils import fit_sklearn_gmm
+from vine_fep.dataset import SyntheticFEPDataset
+from vine_fep.models import MixtureVI, MixtureVIConfig, get_preset, list_presets
+from vine_fep.utils import fit_sklearn_gmm
 
 
 def run_default(dataset):

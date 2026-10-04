@@ -18,12 +18,12 @@ from pathlib import Path
 import warnings
 warnings.filterwarnings('ignore')
 
-from maple_fep.dataset import FEPBenchmarkDataset, FEPDataset
-from maple_fep.models import (
+from vine_fep.dataset import FEPBenchmarkDataset, FEPDataset
+from vine_fep.models import (
     MixtureVI, MixtureVIConfig, VariationalEstimator, VariationalEstimatorConfig,
     GuideType, PriorType, ErrorDistributionType
 )
-from maple_fep.graph_analysis import bootstrap_statistic
+from vine_fep.graph_analysis import bootstrap_statistic
 
 # Set style for better plots
 plt.style.use('seaborn-v0_8-darkgrid')
@@ -781,7 +781,7 @@ def collect_all_metrics(datasets, sampling_time, output_dir):
             
             # Load dataset
             print(f"Loading {dataset_name} dataset with {sampling_time} sampling...")
-            benchmark = FEPBenchmarkDataset(cache_dir="~/.maple_cache")
+            benchmark = FEPBenchmarkDataset(cache_dir="~/.vine_cache")
             edge_df, node_df = benchmark.get_dataset(dataset_name, sampling_time)
             dataset = FEPDataset(dataset_nodes=node_df, dataset_edges=edge_df)
             
@@ -896,7 +896,7 @@ def process_dataset(dataset_name, sampling_time, output_dir):
         
         # Load dataset
         print(f"Loading {dataset_name} dataset with {sampling_time} sampling...")
-        benchmark = FEPBenchmarkDataset(cache_dir="~/.maple_cache")
+        benchmark = FEPBenchmarkDataset(cache_dir="~/.vine_cache")
         edge_df, node_df = benchmark.get_dataset(dataset_name, sampling_time)
         dataset = FEPDataset(dataset_nodes=node_df, dataset_edges=edge_df)
         

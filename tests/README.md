@@ -1,6 +1,6 @@
-# MAPLE Test Suite
+# VINE Test Suite
 
-This directory contains the test suite for the MAPLE package.
+This directory contains the test suite for the VINE package.
 
 ## Running Tests
 
@@ -9,7 +9,7 @@ This directory contains the test suite for the MAPLE package.
 pytest tests/ -v
 
 # Run with coverage
-pytest tests/ --cov=src/maple --cov-report=html
+pytest tests/ --cov=src/vine_fep --cov-report=html
 
 # Test specific components
 pytest tests/test_datasets.py -v

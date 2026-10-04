@@ -5,7 +5,7 @@ import scipy
 import sklearn.metrics
 
 """
-This module was taken from Cinnabar and modified to fit the needs of MAPLE.
+This module was taken from Cinnabar and modified to fit the needs of VINE.
 
 Cinnabar: 
 

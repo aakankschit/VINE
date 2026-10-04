@@ -370,7 +370,7 @@ def plot_dataset_DDGs(
         int(symmetrise) + int(map_positive) != 2
     ), "Symmetrise and map_positive cannot both be True in the same plot"
 
-    # Get edge data - only handle MAPLE dataset structure
+    # Get edge data - only handle VINE dataset structure
     if not hasattr(dataset, "dataset_edges"):
         raise ValueError("Dataset must have 'dataset_edges' attribute")
     edges_df = dataset.dataset_edges
@@ -385,7 +385,7 @@ def plot_dataset_DDGs(
     # Find predicted column if not specified
     common_prediction_columns = ["MAP", "VI", "GMVI", "MLE", "WCC", "Pred. DeltaG"]
     if predicted_column is None:
-        # Try common MAPLE prediction column names
+        # Try common VINE prediction column names
         pred_columns_found = []
         for col in common_prediction_columns:
             if col in edges_df.columns:
@@ -565,7 +565,7 @@ def plot_dataset_DGs(
     ...     statistics=['RMSE', 'MUE', 'R2', 'rho', 'KTAU']
     ... )
     """
-    # Get node data - only handle MAPLE dataset structure
+    # Get node data - only handle VINE dataset structure
     if not hasattr(dataset, "dataset_nodes"):
         raise ValueError("Dataset must have 'dataset_nodes' attribute")
     nodes_df = dataset.dataset_nodes
@@ -580,7 +580,7 @@ def plot_dataset_DGs(
     # Find predicted column if not specified
     common_prediction_columns = ["MAP", "VI", "GMVI", "MLE", "WCC", "Pred. DeltaG"]
     if predicted_column is None:
-        # Try common MAPLE prediction column names
+        # Try common VINE prediction column names
         pred_columns_found = []
         for col in common_prediction_columns:
             if col in nodes_df.columns:

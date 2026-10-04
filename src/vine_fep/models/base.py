@@ -1,7 +1,7 @@
 """
-Base Estimator ABC for MAPLE models.
+Base Estimator ABC for VINE models.
 
-All MAPLE estimators (probabilistic and deterministic) inherit from
+All VINE estimators (probabilistic and deterministic) inherit from
 BaseEstimator, which defines the common interface: fit(), get_results(),
 and add_predictions_to_dataset().
 """
@@ -13,7 +13,7 @@ from .graph_data import GraphData
 
 
 class BaseEstimator(ABC):
-    """Abstract base class for all MAPLE estimators.
+    """Abstract base class for all VINE estimators.
 
     Subclasses must implement:
     - ``fit()`` — run the estimation algorithm

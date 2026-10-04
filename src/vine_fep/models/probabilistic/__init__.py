@@ -1,5 +1,5 @@
 """
-Probabilistic estimators for MAPLE.
+Probabilistic estimators for VINE.
 
 These estimators use variational inference to estimate node values
 from graph-structured FEP data.

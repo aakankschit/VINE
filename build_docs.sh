@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# MAPLE Documentation Build Script
+# VINE Documentation Build Script
 # This script activates the maple environment and builds the documentation
 
-echo "Building MAPLE Documentation..."
+echo "Building VINE Documentation..."
 echo "================================"
 
 # Activate conda environment

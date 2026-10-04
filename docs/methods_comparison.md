@@ -1,12 +1,12 @@
 # Methods Comparison
 
-> A comprehensive reference for all inference methods available in MAPLE. Use this guide to select the right method for your FEP analysis.
+> A comprehensive reference for all inference methods available in VINE. Use this guide to select the right method for your FEP analysis.
 
 ---
 
 ## Overview
 
-MAPLE provides **7 inference methods** organized into two categories:
+VINE provides **7 inference methods** organized into two categories:
 
 | Category | Methods | When to Use |
 |----------|---------|-------------|
@@ -43,7 +43,7 @@ MAPLE provides **7 inference methods** organized into two categories:
 | Property | Value |
 |----------|-------|
 | **Class** | `VariationalEstimator` |
-| **Subpackage** | `maple.models.probabilistic` |
+| **Subpackage** | `vine_fep.models.probabilistic` |
 | **Column name** | `'MAP'` |
 | **Provides uncertainties** | No |
 | **Outlier detection** | No |
@@ -76,7 +76,7 @@ $$\mathcal{L}(\mathbf{z}) = \sum_{(i,j) \in E} (z_j - z_i - y_{ij})^2 + \frac{\s
 | Property | Value |
 |----------|-------|
 | **Class** | `VariationalEstimator` |
-| **Subpackage** | `maple.models.probabilistic` |
+| **Subpackage** | `vine_fep.models.probabilistic` |
 | **Column name** | `'MLE'` |
 | **Provides uncertainties** | No |
 | **Outlier detection** | No |
@@ -104,7 +104,7 @@ This is MAP with a uniform prior ($\lambda = 0$, no regularization).
 | Property | Value |
 |----------|-------|
 | **Class** | `VariationalEstimator` |
-| **Subpackage** | `maple.models.probabilistic` |
+| **Subpackage** | `vine_fep.models.probabilistic` |
 | **Column names** | `'VI'`, `'VI_uncertainty'` |
 | **Provides uncertainties** | Yes (diagonal covariance) |
 | **Outlier detection** | No |
@@ -139,7 +139,7 @@ The ELBO balances three terms:
 | Property | Value |
 |----------|-------|
 | **Class** | `GaussianMixtureVI` |
-| **Subpackage** | `maple.models.probabilistic` |
+| **Subpackage** | `vine_fep.models.probabilistic` |
 | **Column names** | `'GMVI'`, `'GMVI_uncertainty'` |
 | **Provides uncertainties** | Yes (full-rank covariance via Cholesky) |
 | **Outlier detection** | Yes (per-edge posterior outlier probabilities) |
@@ -177,7 +177,7 @@ $$P(\text{outlier} \mid y_{ij}, \mathbf{z}) = \frac{\pi \cdot \mathcal{N}(y_{ij}
 | Property | Value |
 |----------|-------|
 | **Class** | `CycleClosureCorrection` |
-| **Subpackage** | `maple.models.deterministic` |
+| **Subpackage** | `vine_fep.models.deterministic` |
 | **Column names** | `'WCC'`, `'WCC_uncertainty'` |
 | **Provides uncertainties** | Yes (BFS propagation) |
 | **Outlier detection** | No |
@@ -210,7 +210,7 @@ where $\epsilon_C = \sum_{e \in C} y_e$ is the closure error and $w_{ij} = 1/\si
 | Property | Value |
 |----------|-------|
 | **Class** | `SpectralCorrection` |
-| **Subpackage** | `maple.models.deterministic` |
+| **Subpackage** | `vine_fep.models.deterministic` |
 | **Column names** | `'WSFC'`, `'WSFC_uncertainty'` |
 | **Provides uncertainties** | Yes (Laplacian pseudoinverse diagonal) |
 | **Outlier detection** | No |
@@ -246,7 +246,7 @@ $$\sigma_{z_i} = \sqrt{(L_W^+)_{ii}}$$
 | Property | Value |
 |----------|-------|
 | **Class** | `SpectralCorrection` |
-| **Subpackage** | `maple.models.deterministic` |
+| **Subpackage** | `vine_fep.models.deterministic` |
 | **Column names** | `'SFC'`, `'SFC_uncertainty'` |
 | **Provides uncertainties** | Yes (Laplacian pseudoinverse diagonal) |
 | **Outlier detection** | No |
@@ -326,15 +326,15 @@ All methods (except GMVI with its mixture likelihood) solve variants of the same
 ### Running All Methods
 
 ```python
-from maple.dataset import FEPDataset
-from maple.models import (
+from vine_fep.dataset import FEPDataset
+from vine_fep.models import (
     VariationalEstimator, VariationalEstimatorConfig,
     GaussianMixtureVI, GaussianMixtureVIConfig,
     CycleClosureCorrection, CycleClosureCorrectionConfig,
     SpectralCorrection, SpectralCorrectionConfig,
     PriorType, GuideType
 )
-from maple.graph_analysis import compute_simple_statistics
+from vine_fep.graph_analysis import compute_simple_statistics
 
 # Load dataset
 dataset = FEPDataset(dataset_name="cdk8", sampling_time="5ns")

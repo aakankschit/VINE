@@ -3,8 +3,8 @@ Gaussian Mixture Model fitting with cross-validation.
 
 Provides functions for fitting GMMs to 1-D residual data (node or edge)
 and selecting the optimal number of components via held-out log-likelihood.
-The returned :class:`~maple_fep.models.presets.GMMParams` objects plug
-directly into :class:`~maple_fep.models.config.MixtureVIConfig`.
+The returned :class:`~vine_fep.models.GMMParams` objects plug
+directly into :class:`~vine_fep.models.config.MixtureVIConfig`.
 
 Functions
 ---------
@@ -86,7 +86,7 @@ def fit_sklearn_gmm(
 
     Fits on the entire dataset and returns parameters that can be used
     directly as ``likelihood_gmm`` or ``prior_gmm`` in
-    :class:`~maple_fep.models.config.MixtureVIConfig`.
+    :class:`~vine_fep.models.config.MixtureVIConfig`.
 
     Parameters
     ----------
@@ -298,7 +298,7 @@ def residuals_from_dataset(
     """Extract ``(edge_residuals, node_residuals)`` for in-sample GMM fitting.
 
     This is the convenience that turns a dataset directly into the two 1-D
-    arrays a :class:`~maple_fep.models.config.MixtureVIConfig` mixture needs,
+    arrays a :class:`~vine_fep.models.config.MixtureVIConfig` mixture needs,
     so callers never have to remember which columns hold the predicted and
     experimental values:
 

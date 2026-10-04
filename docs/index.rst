@@ -1,16 +1,16 @@
-MAPLE Documentation
+VINE Documentation
 ===================
 
-.. image:: MAPLE_logo.png
+.. image:: VINE_logo.png
    :align: center
    :width: 400px
-   :alt: MAPLE - Maximum A Posteriori Learning of Energies
+   :alt: VINE - A framework to estimate absolute free energies from relative free energies using Bayesian inference
 
 |
 
-**MAPLE (Maximum A Posteriori Learning of Energies)** is a Python package for analyzing Free Energy Perturbation (FEP) data using probabilistic variational estimators, deterministic graph methods, and Bayesian inference.
+**VINE** is a Python package for analyzing Free Energy Perturbation (FEP) data using probabilistic variational estimators, deterministic graph methods, and Bayesian inference.
 
-MAPLE provides tools for:
+VINE provides tools for:
 
 * **Probabilistic Inference**: MAP, MLE, VI, and GMVI methods for node value estimation
 * **Deterministic Graph Methods**: Weighted Cycle Closure (WCC) and Spectral Free-energy Correction (WSFC/SFC)
@@ -23,7 +23,7 @@ MAPLE provides tools for:
 Methods Overview
 ----------------
 
-MAPLE implements both probabilistic and deterministic approaches for inferring absolute free energies from relative FEP measurements:
+VINE implements both probabilistic and deterministic approaches for inferring absolute free energies from relative FEP measurements:
 
 .. list-table::
    :header-rows: 1
@@ -65,7 +65,7 @@ MAPLE implements both probabilistic and deterministic approaches for inferring a
 Core Architecture: Dataset-Centric Design
 ------------------------------------------
 
-MAPLE uses a **dataset-centric architecture** where the ``FEPDataset`` object serves as the central hub for all data and predictions. Models read from the dataset, perform inference, and write their predictions back to the dataset.
+VINE uses a **dataset-centric architecture** where the ``FEPDataset`` object serves as the central hub for all data and predictions. Models read from the dataset, perform inference, and write their predictions back to the dataset.
 
 .. code-block:: text
 
@@ -107,8 +107,8 @@ Quick Start
 
 .. code-block:: python
 
-   from maple.dataset import FEPDataset
-   from maple.models import (
+   from vine_fep.dataset import FEPDataset
+   from vine_fep.models import (
        VariationalEstimator, VariationalEstimatorConfig,
        GaussianMixtureVI, GaussianMixtureVIConfig,
        SpectralCorrection, SpectralCorrectionConfig,
@@ -152,14 +152,14 @@ Installation
 
 .. code-block:: bash
 
-   pip install maple-fep
+   pip install vine-fep
 
 Or for development:
 
 .. code-block:: bash
 
-   git clone https://github.com/aakankschit/MAPLE-fep.git
-   cd MAPLE-fep
+   git clone https://github.com/aakankschit/VINE.git
+   cd VINE
    pip install -e ".[dev]"
 
 Table of Contents

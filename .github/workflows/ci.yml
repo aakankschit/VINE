@@ -75,13 +75,13 @@ jobs:
 
     - name: Run unit tests
       run: |
-        pytest tests/ -v --cov=src/maple --cov-report=xml --cov-report=html --cov-report=term-missing --maxfail=5
+        pytest tests/ -v --cov=src/vine_fep --cov-report=xml --cov-report=html --cov-report=term-missing --maxfail=5
 
-    - name: Clean up MAPLE cache
+    - name: Clean up VINE cache
       if: always()
       run: |
         # Remove any cached FEP benchmark datasets
-        rm -rf ~/.maple_cache
+        rm -rf ~/.vine_cache
         df -h
         
     - name: Upload coverage to Codecov
@@ -131,10 +131,10 @@ jobs:
         export KMP_DUPLICATE_LIB_OK=TRUE
         pytest tests/test_integration.py -v --maxfail=3
 
-    - name: Clean up MAPLE cache
+    - name: Clean up VINE cache
       if: always()
       run: |
-        rm -rf ~/.maple_cache
+        rm -rf ~/.vine_cache
         df -h
         
   build:

@@ -5,8 +5,8 @@ Deprecated aliases for the pre-restructure GMVI API.
 user code keeps working. They emit ``DeprecationWarning`` on construction and
 will be removed in a future major release.
 
-New code should use :class:`maple_fep.models.MixtureVI` and
-:class:`maple_fep.models.MixtureVIConfig` directly.
+New code should use :class:`vine_fep.models.MixtureVI` and
+:class:`vine_fep.models.MixtureVIConfig` directly.
 """
 
 import warnings

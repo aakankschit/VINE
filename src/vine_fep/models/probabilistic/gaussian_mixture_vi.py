@@ -2,7 +2,7 @@
 Compatibility shim for the pre-restructure import path.
 
 The mixture VI estimator now lives in
-:mod:`maple_fep.models.probabilistic.mixture`. This module re-exports
+:mod:`vine_fep.models.probabilistic.mixture`. This module re-exports
 the public symbols for any code that still imports from the old path.
 """
 

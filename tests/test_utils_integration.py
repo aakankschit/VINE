@@ -1,9 +1,9 @@
 """
-Integration tests for the MAPLE utils package.
+Integration tests for the VINE utils package.
 
 This module tests the complete functionality of the performance tracking
 and parameter sweep utilities, including their integration with the
-core MAPLE components.
+core VINE components.
 """
 
 import json
@@ -18,9 +18,9 @@ import pandas as pd
 import pytest
 import torch
 
-from maple_fep.dataset.synthetic_dataset import SyntheticFEPDataset
-from maple_fep.models.config import VariationalEstimatorConfig as ModelConfig, PriorType
-from maple_fep.utils import (ModelRun, ParameterSweep, PerformanceTracker,
+from vine_fep.dataset.synthetic_dataset import SyntheticFEPDataset
+from vine_fep.models.config import VariationalEstimatorConfig as ModelConfig, PriorType
+from vine_fep.utils import (ModelRun, ParameterSweep, PerformanceTracker,
                          compare_model_runs, create_prior_sweep_experiment,
                          load_performance_history)
 
@@ -30,7 +30,7 @@ class TestPerformanceTrackerIntegration:
     Integration tests for PerformanceTracker with real data and models.
 
     These tests verify that the performance tracker works correctly
-    with actual MAPLE components and data structures.
+    with actual VINE components and data structures.
     """
 
     @pytest.fixture
@@ -262,7 +262,7 @@ class TestParameterSweepIntegration:
     Integration tests for ParameterSweep with real models and datasets.
 
     These tests verify that parameter sweeps work correctly with
-    actual MAPLE models and produce valid results.
+    actual VINE models and produce valid results.
     """
 
     @pytest.fixture
@@ -625,8 +625,8 @@ class TestUtilsConvenienceFunctions:
         assert comparison[comparison["run_id"] == "run1"]["RMSE"].iloc[0] == 0.5
         assert comparison[comparison["run_id"] == "run2"]["RMSE"].iloc[0] == 0.3
 
-    @patch("maple_fep.models.probabilistic.variational_estimator.VariationalEstimator.fit")
-    @patch("maple_fep.models.probabilistic.variational_estimator.VariationalEstimator.get_results")
+    @patch("vine_fep.models.probabilistic.variational_estimator.VariationalEstimator.fit")
+    @patch("vine_fep.models.probabilistic.variational_estimator.VariationalEstimator.get_results")
     def test_create_prior_sweep_experiment(
         self, mock_get_results, mock_train, temp_storage_dir, test_datasets
     ):

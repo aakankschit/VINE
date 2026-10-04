@@ -61,9 +61,9 @@ class DatasetPreset:
 
 
 # ---------------------------------------------------------------------------
-# Pre-fitted presets from MAPLE PR #1
-# Likelihood params: MAPLE/src/maple/models/gaussian_markov_model_k_components.py
-# Prior params: MAPLE/src/maple/models/gaussian_markov_model_gmm_both.py
+# Pre-fitted presets from VINE PR #1
+# Likelihood params: VINE/src/vine_fep/models/gaussian_markov_model_k_components.py
+# Prior params: VINE/src/vine_fep/models/gaussian_markov_model_gmm_both.py
 # The OpenFE prior is the 3-component fit selected by k-fold cross-validation
 # (see examples/fit_prior_gmm_openfe.ipynb), giving a VI(3,3) default model.
 # ---------------------------------------------------------------------------

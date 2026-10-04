@@ -1,12 +1,12 @@
-# CLAUDE.md - MAPLE-FEP
+# CLAUDE.md - VINE (pip: vine-fep, import: vine_fep; formerly MAPLE / maple_fep)
 
 Bayesian inference for Free Energy Perturbation (FEP) calculations. Corrects thermodynamic inconsistencies and detects outliers in FEP perturbation graphs.
 
 ## Codebase Map
 
 ```
-src/maple_fep/
-├── __init__.py              # Package root (v0.1.1)
+src/vine_fep/
+├── __init__.py              # Package root (v0.2.0)
 ├── models/                  # Estimators for FEP analysis
 │   ├── base.py              # BaseEstimator ABC (fit, get_results, add_predictions_to_dataset)
 │   ├── config.py            # Pydantic configs + enums + create_config factory
@@ -15,7 +15,6 @@ src/maple_fep/
 │   │                        # CycleClosureCorrectionConfig, SpectralCorrectionConfig
 │   │                        # Enums: PriorType, GuideType, ErrorDistributionType
 │   ├── graph_data.py        # Shared GraphData dataclass
-│   ├── presets.py           # SHIM (deprecated direct import) → probabilistic/mixture/presets
 │   ├── probabilistic/
 │   │   ├── variational_estimator.py  # VariationalEstimator - MAP/VI via Pyro SVI
 │   │   ├── gaussian_mixture_vi.py    # SHIM → mixture/{estimator,_legacy}
@@ -40,8 +39,9 @@ src/maple_fep/
 └── utils/
     ├── parameter_sweep.py       # ParameterSweep, create_*_sweep_experiment
     │                            # (create_gmvi_prior_sweep_experiment is deprecated)
-    ├── performance_tracker.py   # PerformanceTracker, ModelRun
-    └── sklearn_gmm_fitting.py   # SHIM (deprecated direct import) → probabilistic/mixture/fitting
+    └── performance_tracker.py   # PerformanceTracker, ModelRun
+
+src/maple_fep/__init__.py    # Deprecated alias: maple_fep[.x] → vine_fep[.x] (remove in 0.3.0)
 
 tests/
 ├── conftest.py              # Shared fixtures: mock_dataset, sample_*_data
@@ -51,10 +51,12 @@ tests/
 ├── test_datasets.py         # Dataset loading tests
 ├── test_integration.py      # End-to-end workflow tests
 ├── test_sklearn_gmm_fitting.py  # GMM fitting helper tests
+├── test_package_alias.py    # maple_fep → vine_fep alias
 └── test_performance_stats.py
 
 examples/
-├── MAPLE_demo.ipynb         # Main demo notebook
+├── VINE_demo.ipynb          # Main demo notebook
+├── demos/                   # Manuscript-figure demos (marimo); write to figures/<demo>/
 ├── benchmark_all_datasets.py
 ├── fit_prior_gmm.ipynb      # Custom-fit GMM tutorial (use only with experimental data)
 ├── gen_openfe_inference.py  # MixtureVI usage demo (3 modes)
@@ -78,11 +80,11 @@ Custom fits **require** user-supplied residuals (predicted − experimental). Us
 
 | Task | Location |
 |------|----------|
-| Add new inference method | `src/maple_fep/models/` + config in `config.py`, inherit `BaseEstimator` |
+| Add new inference method | `src/vine_fep/models/` + config in `config.py`, inherit `BaseEstimator` |
 | Add new prior type | Add to `PriorType` enum, implement in model class |
-| Add a new dataset preset | `src/maple_fep/models/probabilistic/mixture/presets.py` (extend `_PRESETS`) |
+| Add a new dataset preset | `src/vine_fep/models/probabilistic/mixture/presets.py` (extend `_PRESETS`) |
 | Test fixtures | `tests/conftest.py` - MockDataset, sample_*_data |
-| Benchmark datasets | `FEPBenchmarkDataset` auto-downloads to `~/.maple_cache` |
+| Benchmark datasets | `FEPBenchmarkDataset` auto-downloads to `~/.vine_cache` |
 
 ## Commands
 
@@ -92,7 +94,7 @@ pip install -e ".[dev]"
 
 # Tests
 pytest tests/ -v
-pytest tests/ --cov=src/maple_fep --cov-report=html
+pytest tests/ --cov=src/vine_fep --cov-report=html
 pytest tests/test_integration.py -v  # Integration only
 
 # Format/Lint
@@ -116,7 +118,10 @@ cd docs && make html
 - **Graph data format**: `{"N": int, "M": int, "src": Tensor, "dst": Tensor, "FEP": Tensor}`
 - **CI**: GitHub Actions on `main`/`develop`; tests run on Python 3.10-3.12
 - **Delete test scripts**: Remove any ad-hoc test scripts after use
-- **Canonical imports**: prefer `from maple_fep.models import ...` and `from maple_fep.utils import ...`. The deeper paths (`maple_fep.models.presets`, `maple_fep.utils.sklearn_gmm_fitting`) are deprecation shims and emit `DeprecationWarning`.
+- **Generated outputs**: figures go to `figures/<name>/`, run outputs to `results/<run_id>/` (both gitignored). Never save figures to the repo root or `examples/`.
+- **research/**: the user's personal research log; gitignored, never commit it.
+- **Manuscript**: lives in a separate repo (`~/Desktop/VINE_manuscript`) with its own figure copies.
+- **Canonical imports**: prefer `from vine_fep.models import ...` and `from vine_fep.utils import ...`. `maple_fep` is a deprecated alias (DeprecationWarning, removal in 0.3.0); never use it in new code.
 
 ## Self-Correction
 

@@ -1,5 +1,5 @@
 """
-Deterministic estimators for MAPLE.
+Deterministic estimators for VINE.
 
 These estimators use closed-form or iterative algorithms (no probabilistic
 inference) to estimate node values from graph-structured FEP data.

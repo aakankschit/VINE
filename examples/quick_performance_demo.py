@@ -1,7 +1,7 @@
 """
 Quick Performance Tracking Demo
 
-This script demonstrates the core functionality of MAPLE's performance
+This script demonstrates the core functionality of VINE's performance
 tracking system with a simple, runnable example.
 """
 
@@ -9,7 +9,7 @@ import os
 
 import numpy as np
 
-from maple_fep.utils import PerformanceTracker
+from vine_fep.utils import PerformanceTracker
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"  # Handle OpenMP issue
 
@@ -19,7 +19,7 @@ def quick_demo():
     Quick demonstration of performance tracking functionality.
     """
 
-    print("🚀 MAPLE Performance Tracking Quick Demo")
+    print("🚀 VINE Performance Tracking Quick Demo")
     print("=" * 50)
 
     # Initialize tracker
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     print("🔍 Try these commands to explore further:")
     print("=" * 50)
     print("# Load the data")
-    print("from maple_fep.utils import PerformanceTracker")
+    print("from vine_fep.utils import PerformanceTracker")
     print("tracker = PerformanceTracker('./demo_results')")
     print()
     print("# List all runs")

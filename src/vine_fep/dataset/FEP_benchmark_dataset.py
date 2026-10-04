@@ -36,15 +36,24 @@ class FEPBenchmarkDataset(BaseDataset):
         "tnks2",
     ]
 
-    def __init__(self, cache_dir="~/.maple_cache"):
+    def __init__(self, cache_dir=None):
         """
         Initialize the dataset handler.
 
         Parameters
         ----------
-        cache_dir : str
-            Directory to cache downloaded CSV files.
+        cache_dir : str, optional
+            Directory to cache downloaded CSV files. Defaults to
+            ``~/.vine_cache``, or the pre-0.2.0 ``~/.maple_cache`` if only
+            that one exists, so earlier downloads are reused.
         """
+        if cache_dir is None:
+            cache_dir = "~/.vine_cache"
+            legacy = os.path.expanduser("~/.maple_cache")
+            if os.path.isdir(legacy) and not os.path.exists(
+                os.path.expanduser(cache_dir)
+            ):
+                cache_dir = legacy
         self.cache_dir = os.path.expanduser(cache_dir)
         os.makedirs(self.cache_dir, exist_ok=True)
         self._edge_cache = {}
@@ -117,7 +126,7 @@ class FEPBenchmarkDataset(BaseDataset):
             new_col = col.replace("Δ", "Delta")
             df = df.rename(columns={col: new_col})
 
-        # Standardize column names to match MAPLE expectations
+        # Standardize column names to match VINE expectations
         column_mapping = {
             "Ligand1": "Source",
             "Ligand2": "Destination",
@@ -168,7 +177,7 @@ class FEPBenchmarkDataset(BaseDataset):
             new_col = col.replace("Δ", "Delta")
             df = df.rename(columns={col: new_col})
 
-        # Standardize column names to match MAPLE expectations
+        # Standardize column names to match VINE expectations
         column_mapping = {
             "Ligand": "Name",
             "Exp. DeltaG": "Exp. DeltaG",  # Already correct

@@ -1,7 +1,7 @@
 """
-MAPLE Utilities Package
+VINE Utilities Package
 
-This package provides utility functions for the MAPLE package including
+This package provides utility functions for the VINE package including
 performance tracking, model comparison, data persistence, and GMM fitting.
 """
 

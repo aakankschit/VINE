@@ -1,5 +1,5 @@
 """
-MAPLE Graph Analysis Package
+VINE Graph Analysis Package
 
 This package provides performance statistics and plotting functionality
 for FEP analysis.

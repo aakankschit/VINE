@@ -19,8 +19,8 @@ import warnings
 import numpy as np
 import pytest
 
-from maple_fep.dataset import SyntheticFEPDataset
-from maple_fep.models import (
+from vine_fep.dataset import SyntheticFEPDataset
+from vine_fep.models import (
     GMMParams,
     GaussianMixtureVI,
     GaussianMixtureVIConfig,
@@ -170,7 +170,7 @@ class TestPresetsAPI:
             get_preset("nonexistent")
 
     def test_register_preset(self):
-        from maple_fep.models.presets import DatasetPreset
+        from vine_fep.models import DatasetPreset
 
         gmm = GMMParams(means=[0.0], variances=[1.0], weights=[1.0])
         register_preset(

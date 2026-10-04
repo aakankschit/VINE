@@ -1,7 +1,7 @@
 """
 Example: Model Performance Tracking and Comparison
 
-This example demonstrates how to use the MAPLE performance tracking system
+This example demonstrates how to use the VINE performance tracking system
 to record, store, and compare different model runs over time.
 """
 
@@ -10,10 +10,10 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
-from maple_fep.dataset.synthetic_dataset import SyntheticFEPDataset
-from maple_fep.models.config import VariationalEstimatorConfig as ModelConfig
-# Import MAPLE components
-from maple_fep.utils import PerformanceTracker
+from vine_fep.dataset.synthetic_dataset import SyntheticFEPDataset
+from vine_fep.models.config import VariationalEstimatorConfig as ModelConfig
+# Import VINE components
+from vine_fep.utils import PerformanceTracker
 
 
 def run_model_comparison_example():
@@ -28,7 +28,7 @@ def run_model_comparison_example():
     5. Exporting data for further analysis
     """
 
-    print("🚀 Starting MAPLE Model Performance Tracking Example")
+    print("🚀 Starting VINE Model Performance Tracking Example")
     print("=" * 60)
 
     # ============================================================================
