@@ -465,9 +465,22 @@ class MixtureVI(nn.Module, BaseEstimator):
     def compute_edge_component_responsibilities(self) -> "np.ndarray":
         """Posterior P(component k | edge e) under the K-component likelihood.
 
-        Returns an array of shape ``(num_edges, n_lik_components)``. The
-        component with the largest variance is typically the "outlier" mode;
-        you can identify it via ``np.argmax(self.gmm_variances.numpy())``.
+        Returns an array of shape ``(num_edges, n_lik_components)``.
+
+        To get a per-edge outlier score, take the column of the outlier
+        component. Do not assume it is the widest one: when the likelihood
+        GMM is fit in-sample (``MixtureVIConfig.from_user_data``), a component
+        can sit narrowly on the outliers themselves (e.g. at a +20 kcal/mol
+        shift). The component whose mean is farthest from zero is usually the
+        safer choice::
+
+            resp = model.compute_edge_component_responsibilities()
+            k_out = int(np.argmax(np.abs(model.gmm_means.numpy())))
+            outlier_score = resp[:, k_out]
+
+        If the components share (nearly) the same mean, the mean cannot tell
+        them apart; then the widest component (largest ``gmm_variances``) is
+        the outlier mode.
         """
         if self.node_estimates is None or self.graph_data is None:
             raise ValueError(

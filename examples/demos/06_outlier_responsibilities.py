@@ -24,7 +24,7 @@ def _(mo):
 
     A mixture likelihood does more than down-weight bad edges: after fitting,
     each edge has a posterior probability ("responsibility") of belonging to
-    each likelihood component. The probability of the widest component is a
+    each likelihood component. The probability of the outlier component is a
     per-edge outlier score.
 
     Which component is "the outlier component"? Here it is the one whose
