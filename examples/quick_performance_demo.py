@@ -9,7 +9,7 @@ import os
 
 import numpy as np
 
-from maple.utils import PerformanceTracker
+from maple_fep.utils import PerformanceTracker
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"  # Handle OpenMP issue
 
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     print("🔍 Try these commands to explore further:")
     print("=" * 50)
     print("# Load the data")
-    print("from maple.utils import PerformanceTracker")
+    print("from maple_fep.utils import PerformanceTracker")
     print("tracker = PerformanceTracker('./demo_results')")
     print()
     print("# List all runs")

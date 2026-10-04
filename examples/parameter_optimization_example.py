@@ -10,10 +10,10 @@ import os
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from maple.dataset.synthetic_dataset import SyntheticFEPDataset
-from maple.models.config import VariationalEstimatorConfig as ModelConfig, PriorType
-from maple.utils import PerformanceTracker
-from maple.utils.parameter_sweep import (ParameterSweep,
+from maple_fep.dataset.synthetic_dataset import SyntheticFEPDataset
+from maple_fep.models.config import VariationalEstimatorConfig as ModelConfig, PriorType
+from maple_fep.utils import PerformanceTracker
+from maple_fep.utils.parameter_sweep import (ParameterSweep,
                                          create_prior_sweep_experiment)
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"

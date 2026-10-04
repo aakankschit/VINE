@@ -1,7 +1,7 @@
 Utils Package (``maple.utils``)
 ===============================
 
-The ``maple.utils`` package provides utility functions for performance tracking, parameter optimization, and model comparison.
+The ``maple.utils`` package provides utility functions for performance tracking, parameter optimization, model comparison, and GMM fitting.
 
 Overview
 --------
@@ -11,6 +11,7 @@ The utils package includes:
 * **PerformanceTracker**: Comprehensive performance tracking and storage
 * **ParameterSweep**: Systematic parameter exploration and optimization with failure tracking
 * **ModelRun**: Data structure for storing individual model run results
+* **GMM Fitting**: Fit Gaussian Mixture Models to residuals for use as likelihood/prior in ``MixtureVIConfig``
 * **Convenience Functions**: High-level functions for common workflows
 
 Quick Examples
@@ -125,6 +126,35 @@ Parameter Optimization
    :members:
    :undoc-members:
    :show-inheritance:
+
+GMM Fitting
+~~~~~~~~~~~
+
+Functions for fitting Gaussian Mixture Models to 1-D residual data (e.g. node or edge residuals) and selecting the optimal number of components via cross-validation. The returned ``GMMParams`` objects plug directly into ``MixtureVIConfig`` as ``likelihood_gmm`` or ``prior_gmm``.
+
+.. code-block:: python
+
+   from maple_fep.utils import fit_sklearn_gmm, fit_gmm_cv, select_gmm_components
+   from maple_fep.models import MixtureVIConfig
+
+   # Fit a GMM with a fixed number of components
+   params = fit_sklearn_gmm(residuals, n_components=3, random_state=42)
+
+   # Or select K automatically via cross-validation, then fit
+   params, selection = fit_gmm_cv(residuals, k_values=[2, 3, 4, 5], random_state=42)
+   print(f"Best K: {selection.best_k}")
+
+   # Use the fitted GMM as the likelihood in MixtureVI
+   config = MixtureVIConfig(likelihood_gmm=params)
+
+.. autofunction:: maple_fep.utils.fit_sklearn_gmm
+
+.. autofunction:: maple_fep.utils.select_gmm_components
+
+.. autofunction:: maple_fep.utils.fit_gmm_cv
+
+.. autoclass:: maple_fep.utils.GMMSelectionResult
+   :members:
 
 Convenience Functions
 ~~~~~~~~~~~~~~~~~~~~~

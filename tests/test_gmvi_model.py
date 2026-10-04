@@ -1,381 +1,385 @@
 """
-Unit tests for the GaussianMixtureVI (Gaussian Markov Variational Inference using Pyro).
+Unit tests for the MixtureVI (unified Mixture Variational Inference) model.
 
-This module tests the GaussianMixtureVI implementation including configuration validation,
-model initialization, training, inference, outlier detection, and integration
-with different datasets.
+Both the likelihood and the prior are K-component Gaussian Mixture Models.
+There are three construction paths for ``MixtureVIConfig``:
+
+- ``MixtureVIConfig()`` — defaults to the OpenFE preset (K_lik=3, K_prior=2).
+- ``MixtureVIConfig.from_preset(name)`` — load a named system-specific preset.
+- ``MixtureVIConfig.from_user_data(edge_residuals, node_residuals, K_lik, K_prior)``
+  — fit GMMs on the user's own residuals (only valid when they have
+  experimental data).
+
+Also tests the deprecated ``GaussianMixtureVI*`` aliases (warn but still work)
+and the presets API.
 """
 
+import warnings
+
 import numpy as np
-import pandas as pd
 import pytest
-import torch
 
 from maple_fep.dataset import SyntheticFEPDataset
-from maple_fep.models import GaussianMixtureVI, GaussianMixtureVIConfig
+from maple_fep.models import (
+    GMMParams,
+    GaussianMixtureVI,
+    GaussianMixtureVIConfig,
+    MixtureVI,
+    MixtureVIConfig,
+    get_preset,
+    list_presets,
+    register_preset,
+)
 
 
-class TestGaussianMixtureVIConfig:
-    """
-    Test cases for the GaussianMixtureVIConfig class.
+# ======================================================================
+# MixtureVIConfig — construction paths
+# ======================================================================
 
-    The GaussianMixtureVIConfig class should:
-    - Validate all configuration parameters
-    - Provide sensible defaults
-    - Reject invalid parameter combinations
-    - Support proper parameter ranges
-    """
 
-    def test_default_config(self):
-        """Test that default configuration is valid."""
-        config = GaussianMixtureVIConfig()
+class TestMixtureVIConfigDefaults:
+    """Bare ``MixtureVIConfig()`` should equal the OpenFE preset."""
 
-        # Check that all required fields have values
-        assert config.prior_std > 0
-        assert config.normal_std > 0
-        assert config.outlier_std > 0
-        assert 0 <= config.outlier_prob <= 1
+    def test_default_uses_openfe_preset(self):
+        config = MixtureVIConfig()
+        openfe = get_preset("openfe")
+        assert config.likelihood_gmm.n_components == openfe.likelihood.n_components
+        assert config.prior_gmm.n_components == openfe.prior.n_components
+        np.testing.assert_allclose(config.likelihood_gmm.means, openfe.likelihood.means)
+        np.testing.assert_allclose(config.prior_gmm.means, openfe.prior.means)
+
+    def test_default_training_hyperparams(self):
+        config = MixtureVIConfig()
         assert config.kl_weight >= 0
         assert config.learning_rate > 0
         assert config.n_epochs > 0
         assert config.n_samples > 0
         assert config.patience > 0
-        assert config.model_type == "GaussianMixtureVI"
-
-    def test_custom_config(self):
-        """Test creating config with custom parameters."""
-        config = GaussianMixtureVIConfig(
-            prior_std=10.0,
-            normal_std=0.5,
-            outlier_std=5.0,
-            outlier_prob=0.3,
-            kl_weight=0.2,
-            learning_rate=0.001,
-            n_epochs=500,
-            n_samples=50,
-            patience=20
-        )
-
-        assert config.prior_std == 10.0
-        assert config.normal_std == 0.5
-        assert config.outlier_std == 5.0
-        assert config.outlier_prob == 0.3
-        assert config.kl_weight == 0.2
-        assert config.learning_rate == 0.001
-        assert config.n_epochs == 500
-        assert config.n_samples == 50
-        assert config.patience == 20
-
-    def test_random_seed_config(self):
-        """Test that random_seed config field works."""
-        config = GaussianMixtureVIConfig(random_seed=42)
-        assert config.random_seed == 42
-
-        config_none = GaussianMixtureVIConfig()
-        assert config_none.random_seed is None
-
-    def test_invalid_outlier_prob(self):
-        """Test that invalid outlier probability is rejected."""
-        with pytest.raises(ValueError):
-            GaussianMixtureVIConfig(outlier_prob=1.5)
-
-        with pytest.raises(ValueError):
-            GaussianMixtureVIConfig(outlier_prob=-0.1)
-
-    def test_invalid_std_values(self):
-        """Test that negative std values are rejected."""
-        with pytest.raises(ValueError):
-            GaussianMixtureVIConfig(prior_std=-1.0)
-
-        with pytest.raises(ValueError):
-            GaussianMixtureVIConfig(normal_std=-0.5)
-
-        with pytest.raises(ValueError):
-            GaussianMixtureVIConfig(outlier_std=-2.0)
+        assert config.random_seed is None
+        assert config.model_type == "MixtureVI"
 
     def test_model_type_immutable(self):
-        """Test that model_type cannot be changed."""
-        config = GaussianMixtureVIConfig()
-        assert config.model_type == "GaussianMixtureVI"
-
-        # Pydantic frozen field should prevent modification
+        config = MixtureVIConfig()
         with pytest.raises((ValueError, AttributeError)):
             config.model_type = "OTHER"
 
 
-class TestGMVIPyroModelInitialization:
-    """Test cases for GaussianMixtureVI initialization."""
+class TestMixtureVIConfigFromPreset:
+    """All seven shipped presets should load with non-trivial GMMs."""
 
-    def test_init_with_config(self, mock_dataset):
-        """Test initialization with GaussianMixtureVIConfig."""
-        config = GaussianMixtureVIConfig(prior_std=8.0, learning_rate=0.005)
+    @pytest.mark.parametrize(
+        "name", ["openfe", "cdk8", "pfkfb3", "tnks2", "cmet", "eg5", "syk"]
+    )
+    def test_each_preset_loads(self, name):
+        config = MixtureVIConfig.from_preset(name)
+        assert config.likelihood_gmm.n_components >= 1
+        assert config.prior_gmm.n_components >= 1
 
-        model = GaussianMixtureVI(config=config, dataset=mock_dataset)
+    def test_overrides_apply(self):
+        config = MixtureVIConfig.from_preset("openfe", kl_weight=1.0, n_epochs=500)
+        assert config.kl_weight == 1.0
+        assert config.n_epochs == 500
+        assert config.likelihood_gmm.n_components == 3  # preset value preserved
 
-        assert model.prior_std == 8.0
-        assert model.config.learning_rate == 0.005
-        assert model.dataset == mock_dataset
+    def test_unknown_preset_raises(self):
+        with pytest.raises(KeyError):
+            MixtureVIConfig.from_preset("nonexistent")
 
-    def test_init_stores_config(self, mock_dataset):
-        """Test that config is stored correctly."""
-        config = GaussianMixtureVIConfig(
-            prior_std=7.0,
-            normal_std=0.8,
-            outlier_std=4.0,
-            outlier_prob=0.25
+
+class TestMixtureVIConfigFromUserData:
+    """Custom-fit path for users with their own experimental residuals."""
+
+    @staticmethod
+    def _residuals(rng, K_lik=3, K_prior=2):
+        # Bimodal-ish edges, centred-near-zero nodes
+        edge_resid = np.concatenate(
+            [
+                rng.normal(loc=-1.0, scale=0.5, size=40),
+                rng.normal(loc=1.0, scale=0.5, size=40),
+            ]
         )
-        model = GaussianMixtureVI(config=config, dataset=mock_dataset)
+        node_resid = rng.normal(loc=0.0, scale=1.0, size=30)
+        node_resid -= node_resid.mean()
+        return edge_resid, node_resid
 
-        assert model.prior_std == 7.0
-        assert model.normal_std == torch.tensor(0.8)
-        assert model.outlier_std == torch.tensor(4.0)
-        assert model.outlier_prob == 0.25
+    def test_returns_requested_components(self):
+        rng = np.random.default_rng(0)
+        edge, node = self._residuals(rng)
+        config = MixtureVIConfig.from_user_data(
+            edge, node, K_likelihood=3, K_prior=2, random_state=42
+        )
+        assert config.likelihood_gmm.n_components == 3
+        assert config.prior_gmm.n_components == 2
 
-    def test_default_initialization(self, mock_dataset):
-        """Test initialization with defaults."""
-        config = GaussianMixtureVIConfig()
-        model = GaussianMixtureVI(config=config, dataset=mock_dataset)
+    def test_reproducible_with_seed(self):
+        rng = np.random.default_rng(0)
+        edge, node = self._residuals(rng)
+        c1 = MixtureVIConfig.from_user_data(edge, node, 3, 2, random_state=7)
+        c2 = MixtureVIConfig.from_user_data(edge, node, 3, 2, random_state=7)
+        np.testing.assert_allclose(c1.likelihood_gmm.means, c2.likelihood_gmm.means)
+        np.testing.assert_allclose(c1.prior_gmm.means, c2.prior_gmm.means)
 
-        # Check defaults are set
-        assert model.prior_std == 5.0
-        assert model.normal_std == torch.tensor(1.0)
-        assert model.outlier_std == torch.tensor(3.0)
-        assert model.outlier_prob == 0.2
-        assert model.node_estimates is None
-        assert model.edge_estimates is None
+    def test_overrides_apply(self):
+        rng = np.random.default_rng(0)
+        edge, node = self._residuals(rng)
+        config = MixtureVIConfig.from_user_data(
+            edge, node, 2, 2, random_state=1, kl_weight=0.5, n_epochs=200
+        )
+        assert config.kl_weight == 0.5
+        assert config.n_epochs == 200
 
-    def test_node_estimates_none_before_training(self, mock_dataset):
-        """Test that estimates are None before training."""
-        config = GaussianMixtureVIConfig()
-        model = GaussianMixtureVI(config=config, dataset=mock_dataset)
 
+class TestMixtureVIConfigExplicitGMMs:
+    """Users may also pass GMMParams directly."""
+
+    def test_construct_with_explicit_gmms(self):
+        gmm = GMMParams(means=[0.0, 1.0], variances=[0.5, 0.5], weights=[0.5, 0.5])
+        config = MixtureVIConfig(likelihood_gmm=gmm, prior_gmm=gmm)
+        assert config.likelihood_gmm.n_components == 2
+        assert config.prior_gmm.n_components == 2
+
+
+# ======================================================================
+# Presets API
+# ======================================================================
+
+
+class TestPresetsAPI:
+    def test_list_presets(self):
+        presets = list_presets()
+        assert set(presets) >= {
+            "openfe",
+            "cdk8",
+            "pfkfb3",
+            "tnks2",
+            "cmet",
+            "eg5",
+            "syk",
+        }
+
+    def test_get_preset(self):
+        preset = get_preset("openfe")
+        assert preset.likelihood.n_components == 3
+        assert preset.prior.n_components == 3
+
+    def test_get_preset_case_insensitive(self):
+        assert get_preset("OpenFE").likelihood.n_components == 3
+
+    def test_get_preset_unknown(self):
+        with pytest.raises(KeyError):
+            get_preset("nonexistent")
+
+    def test_register_preset(self):
+        from maple_fep.models.presets import DatasetPreset
+
+        gmm = GMMParams(means=[0.0], variances=[1.0], weights=[1.0])
+        register_preset(
+            "custom_test", DatasetPreset(likelihood=gmm, prior=gmm, description="test")
+        )
+        assert "custom_test" in list_presets()
+        retrieved = get_preset("custom_test")
+        assert retrieved.likelihood.n_components == 1
+        assert retrieved.prior.n_components == 1
+
+
+# ======================================================================
+# MixtureVI initialization
+# ======================================================================
+
+
+class TestMixtureVIInitialization:
+    def test_default_uses_openfe(self, mock_dataset):
+        model = MixtureVI(MixtureVIConfig(), mock_dataset)
+        assert model.n_lik_components == 3
+        assert model.n_prior_components == 3
+
+    def test_init_from_preset(self, mock_dataset):
+        config = MixtureVIConfig.from_preset("openfe")
+        model = MixtureVI(config, mock_dataset)
+        assert model.gmm_means is not None
+        assert model.prior_means is not None
+
+    def test_estimates_none_before_training(self, mock_dataset):
+        model = MixtureVI(MixtureVIConfig(), mock_dataset)
         assert model.node_estimates is None
         assert model.edge_estimates is None
         assert model.node_uncertainties is None
         assert model.edge_uncertainties is None
 
 
-class TestGMVIPyroTraining:
-    """Test cases for model training via .fit() API."""
+# ======================================================================
+# Training
+# ======================================================================
 
-    def test_train_returns_dict(self, mock_dataset):
-        """Test that .fit() and .get_results() returns a results dict."""
-        config = GaussianMixtureVIConfig(num_steps=50)
-        model = GaussianMixtureVI(config=config, dataset=mock_dataset)
 
+class TestMixtureVITraining:
+    def test_fit_default_preset(self, mock_dataset):
+        config = MixtureVIConfig(n_epochs=50, n_samples=20)
+        model = MixtureVI(config, mock_dataset)
         model.fit()
         result = model.get_results()
-
-        assert isinstance(result, dict)
         assert "node_estimates" in result
         assert "edge_estimates" in result
         assert "node_uncertainties" in result
         assert "edge_uncertainties" in result
 
-    def test_train_populates_node_estimates(self, mock_dataset):
-        """Test that training populates node_estimates."""
-        config = GaussianMixtureVIConfig(num_steps=50)
-        model = GaussianMixtureVI(config=config, dataset=mock_dataset)
-
+    def test_loss_decreases(self, mock_dataset):
+        config = MixtureVIConfig(n_epochs=100, n_samples=20)
+        model = MixtureVI(config, mock_dataset)
         model.fit()
+        assert model.loss_history[-1] < model.loss_history[0]
 
-        assert model.node_estimates is not None
-        assert len(model.node_estimates) > 0
-
-        # All estimates should be numeric
-        for val in model.node_estimates.values():
-            assert isinstance(val, (int, float))
-            assert not np.isnan(val)
-
-    def test_train_populates_edge_estimates(self, mock_dataset):
-        """Test that training populates edge_estimates."""
-        config = GaussianMixtureVIConfig(num_steps=50)
-        model = GaussianMixtureVI(config=config, dataset=mock_dataset)
-
+    def test_uncertainties_positive(self, mock_dataset):
+        config = MixtureVIConfig(n_epochs=50, n_samples=20)
+        model = MixtureVI(config, mock_dataset)
         model.fit()
-
-        assert model.edge_estimates is not None
-        assert len(model.edge_estimates) > 0
-
-    def test_train_populates_uncertainties(self, mock_dataset):
-        """Test that training produces uncertainties."""
-        config = GaussianMixtureVIConfig(num_steps=50)
-        model = GaussianMixtureVI(config=config, dataset=mock_dataset)
-
-        model.fit()
-
-        assert model.node_uncertainties is not None
-        assert model.edge_uncertainties is not None
-
-        # Uncertainties should be positive
         for val in model.node_uncertainties.values():
             assert val > 0
 
-    def test_train_loss_history(self, mock_dataset):
-        """Test that training records losses."""
-        config = GaussianMixtureVIConfig(num_steps=50)
-        model = GaussianMixtureVI(config=config, dataset=mock_dataset)
-
+    def test_loss_history_finite(self, mock_dataset):
+        config = MixtureVIConfig(n_epochs=50, n_samples=20)
+        model = MixtureVI(config, mock_dataset)
         model.fit()
         result = model.get_results()
-
-        assert len(result["losses"]) == 50
-        # All losses should be finite
         for loss in result["losses"]:
             assert np.isfinite(loss)
 
-    def test_train_with_random_seed(self, mock_dataset):
-        """Test that random seed produces reproducible results."""
-        config = GaussianMixtureVIConfig(num_steps=50, random_seed=42)
+    def test_reproducibility_with_seed(self, mock_dataset):
+        config = MixtureVIConfig(n_epochs=50, n_samples=20, random_seed=42)
+        m1 = MixtureVI(config, mock_dataset)
+        m1.fit()
+        m2 = MixtureVI(config, mock_dataset)
+        m2.fit()
+        for k in m1.node_estimates:
+            assert abs(m1.node_estimates[k] - m2.node_estimates[k]) < 1e-4
 
-        model1 = GaussianMixtureVI(config=config, dataset=mock_dataset)
-        model1.fit()
-        result1 = model1.get_results()
-
-        model2 = GaussianMixtureVI(config=config, dataset=mock_dataset)
-        model2.fit()
-        result2 = model2.get_results()
-
-        # Results should be identical with same seed
-        for key in model1.node_estimates:
-            assert abs(model1.node_estimates[key] - model2.node_estimates[key]) < 1e-4
-
-
-class TestGMVIPyroResults:
-    """Test cases for .get_results() API."""
-
-    def test_get_results(self, mock_dataset):
-        """Test that get_results returns complete results."""
-        config = GaussianMixtureVIConfig(num_steps=50)
-        model = GaussianMixtureVI(config=config, dataset=mock_dataset)
-
+    def test_suffix_matches_components(self, mock_dataset):
+        # Default = OpenFE preset = K_prior=3, K_lik=3
+        config = MixtureVIConfig(n_epochs=50, n_samples=20)
+        model = MixtureVI(config, mock_dataset)
         model.fit()
-        results = model.get_results()
+        assert model._suffix == "VI(3,3)"
 
-        assert "node_estimates" in results
-        assert "edge_estimates" in results
-        assert "config" in results
-        assert "num_nodes" in results
-        assert "num_edges" in results
-        assert "node_uncertainties" in results
-        assert "edge_uncertainties" in results
 
+# ======================================================================
+# Results API
+# ======================================================================
+
+
+class TestMixtureVIResults:
     def test_get_results_before_training_raises(self, mock_dataset):
-        """Test that get_results before training raises error."""
-        config = GaussianMixtureVIConfig()
-        model = GaussianMixtureVI(config=config, dataset=mock_dataset)
-
+        model = MixtureVI(MixtureVIConfig(), mock_dataset)
         with pytest.raises(ValueError):
             model.get_results()
 
 
-class TestGMVIPyroOutlierDetection:
-    """Test cases for outlier probability computation."""
+# ======================================================================
+# Component responsibilities (replaces 2-component outlier probs)
+# ======================================================================
 
-    def test_compute_outlier_probabilities(self, mock_dataset):
-        """Test outlier probability computation."""
-        config = GaussianMixtureVIConfig(num_steps=50)
-        model = GaussianMixtureVI(config=config, dataset=mock_dataset)
 
+class TestComponentResponsibilities:
+    def test_shape_and_normalization(self, mock_dataset):
+        config = MixtureVIConfig(n_epochs=50, n_samples=20)
+        model = MixtureVI(config, mock_dataset)
         model.fit()
+        resp = model.compute_edge_component_responsibilities()
+        assert resp.shape == (model.graph_data.num_edges, model.n_lik_components)
+        # Each row should sum to ~1
+        np.testing.assert_allclose(resp.sum(axis=1), 1.0, atol=1e-5)
+        # Each entry in [0, 1]
+        assert (resp >= 0).all() and (resp <= 1).all()
 
-        outlier_probs = model.compute_edge_outlier_probabilities()
-
-        assert len(outlier_probs) == model.graph_data.num_edges
-
-        # All probabilities should be in [0, 1]
-        for prob in outlier_probs:
-            assert 0 <= prob <= 1
-
-    def test_outlier_probabilities_before_training_raises(self, mock_dataset):
-        """Test that computing outlier probs before training raises error."""
-        config = GaussianMixtureVIConfig()
-        model = GaussianMixtureVI(config=config, dataset=mock_dataset)
-
+    def test_before_training_raises(self, mock_dataset):
+        model = MixtureVI(MixtureVIConfig(), mock_dataset)
         with pytest.raises(ValueError):
-            model.compute_edge_outlier_probabilities()
+            model.compute_edge_component_responsibilities()
 
 
-class TestGMVIPyroDatasetIntegration:
-    """Test cases for adding predictions to dataset."""
+# ======================================================================
+# Dataset integration
+# ======================================================================
 
-    def test_add_predictions_to_dataset(self, mock_dataset):
-        """Test adding predictions to dataset."""
-        config = GaussianMixtureVIConfig(num_steps=50)
-        model = GaussianMixtureVI(config=config, dataset=mock_dataset)
 
-        model.fit()
-
-        # Should not raise errors
-        model.add_predictions_to_dataset()
-
-        # Check that GMVI column is added to nodes
-        nodes_df = mock_dataset.dataset_nodes
-        assert 'GMVI' in nodes_df.columns
-
-        # Check that GMVI column is added to edges
-        edges_df = mock_dataset.dataset_edges
-        assert 'GMVI' in edges_df.columns
-
-    def test_add_predictions_includes_uncertainties(self, mock_dataset):
-        """Test that uncertainty columns are added."""
-        config = GaussianMixtureVIConfig(num_steps=50)
-        model = GaussianMixtureVI(config=config, dataset=mock_dataset)
-
+class TestMixtureVIDatasetIntegration:
+    def test_add_predictions_default(self, mock_dataset):
+        config = MixtureVIConfig(n_epochs=50, n_samples=20)
+        model = MixtureVI(config, mock_dataset)
         model.fit()
         model.add_predictions_to_dataset()
 
         nodes_df = mock_dataset.dataset_nodes
-        assert 'GMVI_uncertainty' in nodes_df.columns
+        assert "VI(3,3)" in nodes_df.columns
+        assert "VI(3,3)_uncertainty" in nodes_df.columns
 
         edges_df = mock_dataset.dataset_edges
-        assert 'GMVI_uncertainty' in edges_df.columns
+        assert "VI(3,3)" in edges_df.columns
+        assert "VI(3,3)_uncertainty" in edges_df.columns
 
-    def test_predictions_before_train_raises_error(self, mock_dataset):
-        """Test that adding predictions before training raises error."""
-        config = GaussianMixtureVIConfig()
-        model = GaussianMixtureVI(config=config, dataset=mock_dataset)
-
+    def test_predictions_before_train_raises(self, mock_dataset):
+        model = MixtureVI(MixtureVIConfig(), mock_dataset)
         with pytest.raises(ValueError):
             model.add_predictions_to_dataset()
 
 
-class TestGMVIPyroWithSyntheticDataset:
-    """Test GaussianMixtureVI with synthetic dataset."""
+# ======================================================================
+# Synthetic dataset end-to-end
+# ======================================================================
 
-    def test_with_synthetic_dataset(self):
-        """Test GaussianMixtureVI with SyntheticFEPDataset."""
+
+class TestMixtureVIWithSyntheticDataset:
+    def test_default_workflow(self):
         dataset = SyntheticFEPDataset(add_noise=True)
-        config = GaussianMixtureVIConfig(num_steps=50)
-        model = GaussianMixtureVI(config=config, dataset=dataset)
-
-        # Should work without errors
+        config = MixtureVIConfig(n_epochs=50, n_samples=20, random_seed=123)
+        model = MixtureVI(config, dataset)
         model.fit()
-        result = model.get_results()
 
-        assert result is not None
-        assert len(model.node_estimates) == dataset.cycle_data['N']
-
-    def test_end_to_end_workflow(self):
-        """Test complete workflow: init, train, results, predictions."""
-        dataset = SyntheticFEPDataset(add_noise=True)
-        config = GaussianMixtureVIConfig(num_steps=50, random_seed=123)
-        model = GaussianMixtureVI(config=config, dataset=dataset)
-
-        # Train
-        model.fit()
-        train_result = model.get_results()
-        assert "final_loss" in train_result
-
-        # Get results
         results = model.get_results()
+        assert "final_loss" in results
         assert "node_estimates" in results
         assert "node_uncertainties" in results
 
-        # Compute outlier probabilities
-        outlier_probs = model.compute_edge_outlier_probabilities()
-        assert len(outlier_probs) > 0
+        resp = model.compute_edge_component_responsibilities()
+        assert resp.shape[0] > 0
 
-        # Add to dataset
         model.add_predictions_to_dataset()
-        assert "GMVI" in dataset.dataset_nodes.columns
+        assert "VI(3,3)" in dataset.dataset_nodes.columns
+
+    def test_preset_workflow(self):
+        dataset = SyntheticFEPDataset(add_noise=True)
+        config = MixtureVIConfig.from_preset("cdk8", n_epochs=50, n_samples=20)
+        model = MixtureVI(config, dataset)
+        model.fit()
+        model.add_predictions_to_dataset()
+        # cdk8 preset is K_lik=3, K_prior=2
+        assert "VI(2,3)" in dataset.dataset_nodes.columns
+
+
+# ======================================================================
+# Deprecation warnings
+# ======================================================================
+
+
+class TestDeprecationWarnings:
+    def test_gaussian_mixture_vi_config_warns(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            GaussianMixtureVIConfig()
+            assert any(issubclass(x.category, DeprecationWarning) for x in w)
+
+    def test_gaussian_mixture_vi_class_warns(self, mock_dataset):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            config = GaussianMixtureVIConfig()
+            GaussianMixtureVI(config=config, dataset=mock_dataset)
+            assert any(issubclass(x.category, DeprecationWarning) for x in w)
+
+    def test_deprecated_class_still_runs(self, mock_dataset):
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            config = GaussianMixtureVIConfig(n_epochs=50, n_samples=20)
+            model = GaussianMixtureVI(config=config, dataset=mock_dataset)
+            model.fit()
+            assert model.node_estimates is not None
+            # Bridge config now lands in OpenFE preset → suffix VI(3,3)
+            assert model._suffix == "VI(3,3)"

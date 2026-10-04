@@ -178,6 +178,7 @@ class TestSFCEqualsMLE:
             num_steps=5000,
             learning_rate=0.03,
             patience=200,
+            random_seed=0,
         )
         mle_model = VariationalEstimator(config=mle_config, dataset=mock_dataset)
         mle_model.fit()

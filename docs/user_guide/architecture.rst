@@ -48,7 +48,8 @@ MAPLE is organized into four main packages, with models split into **probabilist
    │
    └── utils/
        ├── parameter_sweep.py       (ParameterSweep)
-       └── performance_tracker.py   (PerformanceTracker)
+       ├── performance_tracker.py   (PerformanceTracker)
+       └── sklearn_gmm_fitting.py   (GMM fitting for residuals)
 
 The Dataset as Central Hub
 --------------------------

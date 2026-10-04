@@ -10,10 +10,10 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
-from maple.dataset.synthetic_dataset import SyntheticFEPDataset
-from maple.models.config import VariationalEstimatorConfig as ModelConfig
+from maple_fep.dataset.synthetic_dataset import SyntheticFEPDataset
+from maple_fep.models.config import VariationalEstimatorConfig as ModelConfig
 # Import MAPLE components
-from maple.utils import PerformanceTracker
+from maple_fep.utils import PerformanceTracker
 
 
 def run_model_comparison_example():

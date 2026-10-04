@@ -919,10 +919,16 @@ def create_gmvi_prior_sweep_experiment(
     base_config: Optional[GaussianMixtureVIConfig] = None,
 ) -> pd.DataFrame:
     """
-    Create a prior standard deviation sweep experiment for GaussianMixtureVI.
+    .. deprecated::
+        Sweeping ``prior_std`` is no longer meaningful under the new
+        :class:`MixtureVIConfig` design (the prior is a K-component GMM, not a
+        single Gaussian). This function still runs through the deprecated
+        :class:`GaussianMixtureVIConfig` bridge but the swept values are
+        effectively ignored — all configurations land on the OpenFE preset.
+        For meaningful MixtureVI sweeps, sweep ``kl_weight``, ``learning_rate``,
+        or use :meth:`MixtureVIConfig.from_user_data` with varying ``K_*``.
 
-    This function provides parameter sweep functionality specifically
-    for the GMVI model with Gaussian Markov variational inference.
+    Create a prior standard deviation sweep experiment for GaussianMixtureVI.
 
     Parameters
     ----------
@@ -940,6 +946,17 @@ def create_gmvi_prior_sweep_experiment(
     pd.DataFrame
         Results DataFrame with performance metrics across different prior_std values
     """
+    import warnings as _warnings
+
+    _warnings.warn(
+        "create_gmvi_prior_sweep_experiment is deprecated. The new "
+        "MixtureVIConfig design does not use prior_std; the swept values "
+        "will be silently ignored by the underlying bridge. Sweep "
+        "kl_weight or learning_rate instead, or use "
+        "MixtureVIConfig.from_user_data for K-parameterized fits.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
 
     if base_config is None:
         base_config = GaussianMixtureVIConfig(
