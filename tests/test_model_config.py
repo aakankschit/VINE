@@ -8,7 +8,7 @@ including the factory function and enum types.
 import pytest
 from pydantic import ValidationError
 
-from maple_fep.models.config import (
+from vine_fep.models.config import (
     BaseEstimatorConfig,
     VariationalEstimatorConfig,
     GaussianMixtureVIConfig,

@@ -1,12 +1,12 @@
 Architecture and Design
 =======================
 
-This document explains MAPLE's architecture and design philosophy, focusing on the central role of the ``FEPDataset`` object and how models interact with it.
+This document explains VINE's architecture and design philosophy, focusing on the central role of the ``FEPDataset`` object and how models interact with it.
 
 Design Philosophy
 -----------------
 
-MAPLE follows a **dataset-centric design** where:
+VINE follows a **dataset-centric design** where:
 
 1. **The dataset owns the data**: All FEP data (nodes, edges, predictions) lives in the ``FEPDataset`` object
 2. **Models are processors**: Models read from the dataset, perform inference, and write results back
@@ -18,11 +18,11 @@ This design enables easy comparison of different models and methods on the same 
 Module Overview
 ---------------
 
-MAPLE is organized into four main packages, with models split into **probabilistic** and **deterministic** subpackages:
+VINE is organized into four main packages, with models split into **probabilistic** and **deterministic** subpackages:
 
 .. code-block:: text
 
-   maple/
+   vine_fep/
    ├── dataset/
    │   ├── base_dataset.py          (BaseDataset ABC)
    │   ├── dataset.py               (FEPDataset)
@@ -48,12 +48,13 @@ MAPLE is organized into four main packages, with models split into **probabilist
    │
    └── utils/
        ├── parameter_sweep.py       (ParameterSweep)
-       └── performance_tracker.py   (PerformanceTracker)
+       ├── performance_tracker.py   (PerformanceTracker)
+       └── (GMM fitting for residuals: vine_fep.utils.fit_sklearn_gmm, ...)
 
 The Dataset as Central Hub
 --------------------------
 
-The ``FEPDataset`` object serves as the central hub in MAPLE:
+The ``FEPDataset`` object serves as the central hub in VINE:
 
 .. code-block:: text
 
@@ -78,7 +79,7 @@ The ``FEPDataset`` object serves as the central hub in MAPLE:
 Model-Dataset Interaction Pattern
 ---------------------------------
 
-All MAPLE models follow a consistent interaction pattern with the dataset:
+All VINE models follow a consistent interaction pattern with the dataset:
 
 .. code-block:: text
 
@@ -103,7 +104,7 @@ All MAPLE models follow a consistent interaction pattern with the dataset:
 Available Models
 ----------------
 
-MAPLE provides both probabilistic and deterministic inference methods:
+VINE provides both probabilistic and deterministic inference methods:
 
 .. code-block:: text
 
@@ -131,7 +132,7 @@ Probabilistic Models (``models.probabilistic``)
 
 .. code-block:: python
 
-   from maple.models import VariationalEstimator, VariationalEstimatorConfig, PriorType, GuideType
+   from vine_fep.models import VariationalEstimator, VariationalEstimatorConfig, PriorType, GuideType
 
    # MAP inference
    config = VariationalEstimatorConfig(
@@ -147,7 +148,7 @@ Probabilistic Models (``models.probabilistic``)
 
 .. code-block:: python
 
-   from maple.models import GaussianMixtureVI, GaussianMixtureVIConfig
+   from vine_fep.models import GaussianMixtureVI, GaussianMixtureVIConfig
 
    config = GaussianMixtureVIConfig(
        prior_std=5.0,
@@ -170,7 +171,7 @@ Deterministic Models (``models.deterministic``)
 
 .. code-block:: python
 
-   from maple.models import CycleClosureCorrection, CycleClosureCorrectionConfig
+   from vine_fep.models import CycleClosureCorrection, CycleClosureCorrectionConfig
 
    config = CycleClosureCorrectionConfig(tolerance=1e-6)
    model = CycleClosureCorrection(dataset=dataset, config=config)
@@ -181,7 +182,7 @@ Deterministic Models (``models.deterministic``)
 
 .. code-block:: python
 
-   from maple.models import SpectralCorrection, SpectralCorrectionConfig
+   from vine_fep.models import SpectralCorrection, SpectralCorrectionConfig
 
    # WSFC: weighted by edge uncertainties
    config = SpectralCorrectionConfig(use_weights=True)
@@ -205,7 +206,7 @@ All model configurations use Pydantic for validation:
 
 .. code-block:: python
 
-   from maple.models import VariationalEstimatorConfig, GaussianMixtureVIConfig
+   from vine_fep.models import VariationalEstimatorConfig, GaussianMixtureVIConfig
 
    # Validation happens automatically
    config = VariationalEstimatorConfig(

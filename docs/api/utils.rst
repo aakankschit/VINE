@@ -1,7 +1,7 @@
-Utils Package (``maple.utils``)
+Utils Package (``vine_fep.utils``)
 ===============================
 
-The ``maple.utils`` package provides utility functions for performance tracking, parameter optimization, and model comparison.
+The ``vine_fep.utils`` package provides utility functions for performance tracking, parameter optimization, model comparison, and GMM fitting.
 
 Overview
 --------
@@ -11,6 +11,7 @@ The utils package includes:
 * **PerformanceTracker**: Comprehensive performance tracking and storage
 * **ParameterSweep**: Systematic parameter exploration and optimization with failure tracking
 * **ModelRun**: Data structure for storing individual model run results
+* **GMM Fitting**: Fit Gaussian Mixture Models to residuals for use as likelihood/prior in ``MixtureVIConfig``
 * **Convenience Functions**: High-level functions for common workflows
 
 Quick Examples
@@ -21,7 +22,7 @@ Performance Tracking
 
 .. code-block:: python
 
-   from maple.utils import PerformanceTracker
+   from vine_fep.utils import PerformanceTracker
    
    # Initialize tracker
    tracker = PerformanceTracker("./results")
@@ -43,7 +44,7 @@ Parameter Sweeps
 
 .. code-block:: python
 
-   from maple.utils import ParameterSweep
+   from vine_fep.utils import ParameterSweep
    
    # Initialize sweep
    sweep = ParameterSweep(tracker, base_config, datasets)
@@ -104,31 +105,60 @@ API Reference
 Performance Tracking
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: maple.utils.PerformanceTracker
+.. autoclass:: vine_fep.utils.PerformanceTracker
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. autoclass:: maple.utils.ModelRun
+.. autoclass:: vine_fep.utils.ModelRun
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. autofunction:: maple.utils.load_performance_history
+.. autofunction:: vine_fep.utils.load_performance_history
 
-.. autofunction:: maple.utils.compare_model_runs
+.. autofunction:: vine_fep.utils.compare_model_runs
 
 Parameter Optimization
 ~~~~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: maple.utils.ParameterSweep
+.. autoclass:: vine_fep.utils.ParameterSweep
    :members:
    :undoc-members:
    :show-inheritance:
 
+GMM Fitting
+~~~~~~~~~~~
+
+Functions for fitting Gaussian Mixture Models to 1-D residual data (e.g. node or edge residuals) and selecting the optimal number of components via cross-validation. The returned ``GMMParams`` objects plug directly into ``MixtureVIConfig`` as ``likelihood_gmm`` or ``prior_gmm``.
+
+.. code-block:: python
+
+   from vine_fep.utils import fit_sklearn_gmm, fit_gmm_cv, select_gmm_components
+   from vine_fep.models import MixtureVIConfig
+
+   # Fit a GMM with a fixed number of components
+   params = fit_sklearn_gmm(residuals, n_components=3, random_state=42)
+
+   # Or select K automatically via cross-validation, then fit
+   params, selection = fit_gmm_cv(residuals, k_values=[2, 3, 4, 5], random_state=42)
+   print(f"Best K: {selection.best_k}")
+
+   # Use the fitted GMM as the likelihood in MixtureVI
+   config = MixtureVIConfig(likelihood_gmm=params)
+
+.. autofunction:: vine_fep.utils.fit_sklearn_gmm
+
+.. autofunction:: vine_fep.utils.select_gmm_components
+
+.. autofunction:: vine_fep.utils.fit_gmm_cv
+
+.. autoclass:: vine_fep.utils.GMMSelectionResult
+   :members:
+
 Convenience Functions
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. autofunction:: maple.utils.create_prior_sweep_experiment
+.. autofunction:: vine_fep.utils.create_prior_sweep_experiment
 
-.. autofunction:: maple.utils.create_comprehensive_parameter_study
+.. autofunction:: vine_fep.utils.create_comprehensive_parameter_study

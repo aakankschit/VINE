@@ -1,7 +1,7 @@
-Graph Analysis Package (``maple.graph_analysis``)
+Graph Analysis Package (``vine_fep.graph_analysis``)
 ==================================================
 
-The ``maple.graph_analysis`` package provides performance statistics, plotting functionality, and graph-based analysis tools for FEP data.
+The ``vine_fep.graph_analysis`` package provides performance statistics, plotting functionality, and graph-based analysis tools for FEP data.
 
 Overview
 --------
@@ -15,7 +15,7 @@ The graph analysis package includes:
 * **Graph Setup**: Tools for graph construction and analysis
 * **Cycle Analysis**: Graph cycle detection and analysis
 
-The plotting functions support all MAPLE models (MAP, VI, GMVI, MLE, WCC) with automatic detection and consistent color schemes.
+The plotting functions support all VINE models (MAP, VI, GMVI, MLE, WCC) with automatic detection and consistent color schemes.
 
 Quick Examples
 --------------
@@ -25,7 +25,7 @@ Performance Statistics
 
 .. code-block:: python
 
-   from maple.graph_analysis import calculate_rmse, calculate_r2, bootstrap_statistic
+   from vine_fep.graph_analysis import calculate_rmse, calculate_r2, bootstrap_statistic
    
    # Calculate basic metrics
    rmse = calculate_rmse(y_true, y_pred)
@@ -43,7 +43,7 @@ Plotting
 
 .. code-block:: python
 
-   from maple.graph_analysis import (
+   from vine_fep.graph_analysis import (
        plot_dataset_DDGs,
        plot_model_comparison_bars,
        plot_model_comparison_correlation,
@@ -72,17 +72,17 @@ API Reference
 Performance Statistics
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-.. autofunction:: maple.graph_analysis.calculate_mae
+.. autofunction:: vine_fep.graph_analysis.calculate_mae
 
-.. autofunction:: maple.graph_analysis.calculate_rmse
+.. autofunction:: vine_fep.graph_analysis.calculate_rmse
 
-.. autofunction:: maple.graph_analysis.calculate_r2
+.. autofunction:: vine_fep.graph_analysis.calculate_r2
 
-.. autofunction:: maple.graph_analysis.calculate_correlation
+.. autofunction:: vine_fep.graph_analysis.calculate_correlation
 
-.. autofunction:: maple.graph_analysis.bootstrap_statistic
+.. autofunction:: vine_fep.graph_analysis.bootstrap_statistic
 
-.. autofunction:: maple.graph_analysis.compute_simple_statistics
+.. autofunction:: vine_fep.graph_analysis.compute_simple_statistics
 
 Plotting Functions
 ~~~~~~~~~~~~~~~~~~
@@ -92,11 +92,11 @@ Single Model Plotting
 
 These functions create scatter plots for a single model's predictions.
 
-.. autofunction:: maple.graph_analysis.plot_dataset_DDGs
+.. autofunction:: vine_fep.graph_analysis.plot_dataset_DDGs
 
-.. autofunction:: maple.graph_analysis.plot_dataset_DGs
+.. autofunction:: vine_fep.graph_analysis.plot_dataset_DGs
 
-.. autofunction:: maple.graph_analysis.plot_dataset_all_DDGs
+.. autofunction:: vine_fep.graph_analysis.plot_dataset_all_DDGs
 
 Multi-Model Comparison
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -113,13 +113,13 @@ These functions compare multiple models side-by-side with consistent colors.
 * WSFC - Weighted Spectral Free-energy Correction
 * SFC - Spectral Free-energy Correction (unweighted)
 
-.. autofunction:: maple.graph_analysis.plot_model_comparison_bars
+.. autofunction:: vine_fep.graph_analysis.plot_model_comparison_bars
 
-.. autofunction:: maple.graph_analysis.plot_model_comparison_correlation
+.. autofunction:: vine_fep.graph_analysis.plot_model_comparison_correlation
 
 Error Analysis
 ^^^^^^^^^^^^^^
 
 Analyze prediction error distributions to assess model quality and determine appropriate error models.
 
-.. autofunction:: maple.graph_analysis.plot_error_distribution
+.. autofunction:: vine_fep.graph_analysis.plot_error_distribution

@@ -1,8 +1,8 @@
 """
-Integration tests for the MAPLE package.
+Integration tests for the VINE package.
 
 This module tests the integration between different components
-of the MAPLE package to ensure they work together correctly.
+of the VINE package to ensure they work together correctly.
 """
 
 from unittest.mock import Mock, patch
@@ -12,14 +12,14 @@ import pandas as pd
 import pytest
 import torch
 
-from maple_fep.graph_analysis.performance_stats import compute_simple_statistics
-from maple_fep.models.probabilistic.variational_estimator import VariationalEstimator
-from maple_fep.models.config import VariationalEstimatorConfig as ModelConfig
+from vine_fep.graph_analysis.performance_stats import compute_simple_statistics
+from vine_fep.models.probabilistic.variational_estimator import VariationalEstimator
+from vine_fep.models.config import VariationalEstimatorConfig as ModelConfig
 
 
 class TestPackageIntegration:
     """
-    Integration tests for the complete MAPLE package.
+    Integration tests for the complete VINE package.
 
     These tests verify that different components work together
     correctly in realistic usage scenarios.
@@ -253,16 +253,16 @@ class TestPackageImports:
 
     def test_main_package_import(self):
         """Test importing the main package."""
-        import maple_fep
+        import vine_fep
 
         # Should have main submodules
-        assert hasattr(maple_fep, "models")
-        assert hasattr(maple_fep, "dataset")
-        assert hasattr(maple_fep, "graph_analysis")
+        assert hasattr(vine_fep, "models")
+        assert hasattr(vine_fep, "dataset")
+        assert hasattr(vine_fep, "graph_analysis")
 
     def test_models_import(self):
         """Test importing models subpackage."""
-        from maple_fep.models import VariationalEstimator, VariationalEstimatorConfig
+        from vine_fep.models import VariationalEstimator, VariationalEstimatorConfig
 
         # Should be able to access classes
         assert VariationalEstimator is not None
@@ -270,7 +270,7 @@ class TestPackageImports:
 
     def test_dataset_import(self):
         """Test importing dataset subpackage."""
-        from maple_fep.dataset import BaseDataset, FEPDataset, SyntheticFEPDataset
+        from vine_fep.dataset import BaseDataset, FEPDataset, SyntheticFEPDataset
 
         # Should be able to access classes
         assert BaseDataset is not None
@@ -279,7 +279,7 @@ class TestPackageImports:
 
     def test_graph_analysis_import(self):
         """Test importing graph analysis subpackage."""
-        from maple_fep.graph_analysis import calculate_mae, calculate_rmse
+        from vine_fep.graph_analysis import calculate_mae, calculate_rmse
 
         # Should be able to access functions
         assert callable(calculate_mae)

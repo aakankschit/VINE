@@ -16,9 +16,9 @@ import pandas as pd
 import pytest
 import torch
 
-from maple_fep.models.config import VariationalEstimatorConfig as ModelConfig, PriorType
-from maple_fep.utils import PerformanceTracker
-from maple_fep.utils.parameter_sweep import (ParameterSweep,
+from vine_fep.models.config import VariationalEstimatorConfig as ModelConfig, PriorType
+from vine_fep.utils import PerformanceTracker
+from vine_fep.utils.parameter_sweep import (ParameterSweep,
                                          create_comprehensive_parameter_study,
                                          create_prior_sweep_experiment)
 
@@ -438,7 +438,7 @@ class TestConvenienceFunctions:
         # Test that the functions exist and can be imported
         import inspect
 
-        from maple_fep.utils.parameter_sweep import (
+        from vine_fep.utils.parameter_sweep import (
             create_comprehensive_parameter_study,
             create_prior_sweep_experiment)
 
@@ -553,8 +553,8 @@ class TestParameterSweepIntegrationScenarios:
         # Create a sweep instance to test optimization
         from unittest.mock import Mock
 
-        from maple_fep.models.config import VariationalEstimatorConfig as ModelConfig
-        from maple_fep.utils.parameter_sweep import ParameterSweep
+        from vine_fep.models.config import VariationalEstimatorConfig as ModelConfig
+        from vine_fep.utils.parameter_sweep import ParameterSweep
 
         tracker = Mock()
         base_config = ModelConfig()

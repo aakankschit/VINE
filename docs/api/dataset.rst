@@ -1,12 +1,12 @@
-Dataset Package (``maple.dataset``)
+Dataset Package (``vine_fep.dataset``)
 ===================================
 
-The ``maple.dataset`` package provides the central data hub for MAPLE. The ``FEPDataset`` class serves as the central object that stores all FEP data and model predictions.
+The ``vine_fep.dataset`` package provides the central data hub for VINE. The ``FEPDataset`` class serves as the central object that stores all FEP data and model predictions.
 
 Overview
 --------
 
-In MAPLE's dataset-centric architecture, the ``FEPDataset`` object:
+In VINE's dataset-centric architecture, the ``FEPDataset`` object:
 
 1. **Stores FEP data** in ``dataset_nodes`` and ``dataset_edges`` DataFrames
 2. **Provides graph structure** to models via ``get_graph_data()``
@@ -42,8 +42,8 @@ Quick Example
 
 .. code-block:: python
 
-   from maple.dataset import FEPDataset
-   from maple.models import VariationalEstimator, VariationalEstimatorConfig, GaussianMixtureVI, GaussianMixtureVIConfig
+   from vine_fep.dataset import FEPDataset
+   from vine_fep.models import VariationalEstimator, VariationalEstimatorConfig, GaussianMixtureVI, GaussianMixtureVIConfig
 
    # Create dataset (multiple options)
    dataset = FEPDataset(dataset_name="cdk8", sampling_time="5ns")
@@ -229,7 +229,7 @@ API Reference
 Base Classes
 ~~~~~~~~~~~~
 
-.. autoclass:: maple.dataset.BaseDataset
+.. autoclass:: vine_fep.dataset.BaseDataset
    :members:
    :undoc-members:
    :show-inheritance:
@@ -240,7 +240,7 @@ Main Dataset Classes
 FEPDataset
 ^^^^^^^^^^
 
-.. autoclass:: maple.dataset.FEPDataset
+.. autoclass:: vine_fep.dataset.FEPDataset
    :members:
    :undoc-members:
    :show-inheritance:
@@ -264,7 +264,7 @@ FEPDataset
 FEPBenchmarkDataset
 ^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: maple.dataset.FEPBenchmarkDataset
+.. autoclass:: vine_fep.dataset.FEPBenchmarkDataset
    :members:
    :undoc-members:
    :show-inheritance:
@@ -286,7 +286,7 @@ Specialized Datasets
 SyntheticFEPDataset
 ^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: maple.dataset.SyntheticFEPDataset
+.. autoclass:: vine_fep.dataset.SyntheticFEPDataset
    :members:
    :undoc-members:
    :show-inheritance:
@@ -295,7 +295,7 @@ SyntheticFEPDataset
 
 .. code-block:: python
 
-   from maple.dataset import SyntheticFEPDataset
+   from vine_fep.dataset import SyntheticFEPDataset
    
    # Generate synthetic FEP data for testing
    synthetic = SyntheticFEPDataset(
@@ -336,10 +336,10 @@ Example: Multi-Model Comparison
 
 .. code-block:: python
 
-   from maple.dataset import FEPDataset
-   from maple.models import VariationalEstimator, VariationalEstimatorConfig, GaussianMixtureVI, GaussianMixtureVIConfig
-   from maple.models import PriorType, GuideType
-   from maple.graph_analysis import compute_simple_statistics
+   from vine_fep.dataset import FEPDataset
+   from vine_fep.models import VariationalEstimator, VariationalEstimatorConfig, GaussianMixtureVI, GaussianMixtureVIConfig
+   from vine_fep.models import PriorType, GuideType
+   from vine_fep.graph_analysis import compute_simple_statistics
 
    # Create dataset
    dataset = FEPDataset(dataset_name="cdk8", sampling_time="5ns")

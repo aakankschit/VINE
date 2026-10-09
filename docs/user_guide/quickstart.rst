@@ -1,12 +1,12 @@
 Quick Start Guide
 =================
 
-This guide will get you up and running with MAPLE in just a few minutes.
+This guide will get you up and running with VINE in just a few minutes.
 
 Overview
 --------
 
-MAPLE uses a **dataset-centric architecture** where the ``FEPDataset`` object serves as the central hub for all data and predictions. The main workflow involves:
+VINE uses a **dataset-centric architecture** where the ``FEPDataset`` object serves as the central hub for all data and predictions. The main workflow involves:
 
 1. **Creating a dataset** - Load your FEP data into an ``FEPDataset`` object
 2. **Fitting models** - Configure and fit one or more inference models
@@ -33,13 +33,13 @@ MAPLE uses a **dataset-centric architecture** where the ``FEPDataset`` object se
 Basic Example
 -------------
 
-Here's a complete example of the MAPLE workflow:
+Here's a complete example of the VINE workflow:
 
 .. code-block:: python
 
-   from maple.dataset import FEPDataset
-   from maple.models import VariationalEstimator, VariationalEstimatorConfig, PriorType, GuideType
-   from maple.models import GaussianMixtureVI, GaussianMixtureVIConfig
+   from vine_fep.dataset import FEPDataset
+   from vine_fep.models import VariationalEstimator, VariationalEstimatorConfig, PriorType, GuideType
+   from vine_fep.models import GaussianMixtureVI, GaussianMixtureVIConfig
    
    # =====================================================
    # STEP 1: Create the dataset (your central data hub)
@@ -98,7 +98,7 @@ Here's a complete example of the MAPLE workflow:
    # STEP 5: Compare model performance
    # =====================================================
    
-   from maple.graph_analysis import compute_simple_statistics
+   from vine_fep.graph_analysis import compute_simple_statistics
    
    exp_values = dataset.dataset_nodes['Exp. DeltaG'].values
    
@@ -110,7 +110,7 @@ Here's a complete example of the MAPLE workflow:
 Data Format
 -----------
 
-MAPLE expects FEP data in two DataFrames: **nodes** and **edges**.
+VINE expects FEP data in two DataFrames: **nodes** and **edges**.
 
 Edge DataFrame
 ~~~~~~~~~~~~~~
@@ -160,11 +160,11 @@ Creating a Dataset
 From Benchmark Data
 ~~~~~~~~~~~~~~~~~~~
 
-MAPLE includes standard FEP benchmark datasets:
+VINE includes standard FEP benchmark datasets:
 
 .. code-block:: python
 
-   from maple.dataset import FEPDataset
+   from vine_fep.dataset import FEPDataset
    
    # Load a benchmark dataset
    dataset = FEPDataset(dataset_name="cdk8", sampling_time="5ns")
@@ -177,7 +177,7 @@ From DataFrames
 .. code-block:: python
 
    import pandas as pd
-   from maple.dataset import FEPDataset
+   from vine_fep.dataset import FEPDataset
    
    # Create edge DataFrame
    edges_df = pd.DataFrame({
@@ -199,11 +199,11 @@ From DataFrames
 From Edges Only
 ~~~~~~~~~~~~~~~
 
-If you only have edge data, MAPLE can derive node values:
+If you only have edge data, VINE can derive node values:
 
 .. code-block:: python
 
-   from maple.dataset import FEPDataset
+   from vine_fep.dataset import FEPDataset
    
    # Dataset will automatically derive node values from edges
    dataset = FEPDataset(dataset_edges=edges_df)
@@ -218,7 +218,7 @@ The ``VariationalEstimator`` provides Maximum A Posteriori (MAP), Variational In
 
 .. code-block:: python
 
-   from maple.models import VariationalEstimator, VariationalEstimatorConfig, PriorType, GuideType
+   from vine_fep.models import VariationalEstimator, VariationalEstimatorConfig, PriorType, GuideType
 
    # MAP inference (point estimates)
    map_config = VariationalEstimatorConfig(
@@ -249,7 +249,7 @@ The ``GaussianMixtureVI`` uses a Gaussian mixture likelihood for outlier detecti
 
 .. code-block:: python
 
-   from maple.models import GaussianMixtureVI, GaussianMixtureVIConfig
+   from vine_fep.models import GaussianMixtureVI, GaussianMixtureVIConfig
 
    gmvi_config = GaussianMixtureVIConfig(
        prior_std=5.0,        # Prior std for node values
@@ -274,7 +274,7 @@ The ``SpectralCorrection`` uses the graph Laplacian pseudoinverse for a direct, 
 
 .. code-block:: python
 
-   from maple.models import SpectralCorrection, SpectralCorrectionConfig
+   from vine_fep.models import SpectralCorrection, SpectralCorrectionConfig
 
    # WSFC: Weighted by edge uncertainties (precision = 1/sigma^2)
    wsfc_config = SpectralCorrectionConfig(use_weights=True)
@@ -340,7 +340,7 @@ After fitting models, analyze performance using the dataset:
 
 .. code-block:: python
 
-   from maple.graph_analysis import (
+   from vine_fep.graph_analysis import (
        compute_simple_statistics,
        compute_bootstrap_statistics
    )
@@ -369,7 +369,7 @@ Create publication-quality plots:
 
 .. code-block:: python
 
-   from maple.graph_analysis import plot_node_correlation
+   from vine_fep.graph_analysis import plot_node_correlation
    import matplotlib.pyplot as plt
    
    # Plot model predictions vs experimental data

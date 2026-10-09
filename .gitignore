@@ -132,7 +132,6 @@ dmypy.json
 demo_results/
 test_results/
 test_tutorial_results/
-temp_comparison/
 tutorial_results/
 
 # IDE
@@ -154,3 +153,22 @@ tutorial_results/
 
 # Project-specific files (not for remote)
 # Note: CHANGELOG.md, CLAUDE.md, and MANIFEST.in should be tracked in git
+
+# Generated outputs: figures and per-run results never live in the repo root
+/results/
+/figures/
+/*.pdf
+/*.png
+examples/**/*.pdf
+examples/**/*.png
+benchmark_plots/
+model_results/
+parameter_study_results/
+__marimo__/
+docs/tutorials/*.html
+
+# Personal research log
+/research/
+
+# Local Claude Code settings
+.claude/settings.local.json

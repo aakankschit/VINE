@@ -21,8 +21,8 @@ sys.path.insert(0, str(src_dir))
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "MAPLE-fep"
-copyright = "2025, MAPLE Contributors"
+project = "VINE"
+copyright = "2025, VINE Contributors"
 author = "Aakankschit Nandkeolyar"
 release = "0.1.0"
 version = "0.1.0"
@@ -96,7 +96,7 @@ html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
 
 # Logo
-html_logo = "MAPLE_logo.png"
+html_logo = "VINE_logo.png"
 
 # Theme options
 html_theme_options = {
@@ -114,7 +114,7 @@ html_theme_options = {
 html_context = {
     "display_github": True,
     "github_user": "aakankschit",
-    "github_repo": "MAPLE-fep",
+    "github_repo": "VINE",
     "github_version": "main",
     "conf_py_path": "/docs/",
 }
@@ -152,21 +152,21 @@ latex_elements = {
 }
 
 latex_documents = [
-    ("index", "MAPLE.tex", "MAPLE Documentation", "MAPLE Contributors", "manual"),
+    ("index", "VINE.tex", "VINE Documentation", "VINE Contributors", "manual"),
 ]
 
 # -- Options for manual page output -----------------------------------------
-man_pages = [("index", "maple", "MAPLE Documentation", [author], 1)]
+man_pages = [("index", "vine", "VINE Documentation", [author], 1)]
 
 # -- Options for Texinfo output ---------------------------------------------
 texinfo_documents = [
     (
         "index",
-        "MAPLE",
-        "MAPLE Documentation",
+        "VINE",
+        "VINE Documentation",
         author,
-        "MAPLE",
-        "Maximum A Posteriori Learning of Energies for FEP analysis.",
+        "VINE",
+        "A framework to estimate absolute free energies from relative free energies using Bayesian inference.",
         "Miscellaneous",
     ),
 ]

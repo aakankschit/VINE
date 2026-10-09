@@ -1,7 +1,7 @@
 Parameter Sweep Examples
 ========================
 
-This page provides detailed examples of using MAPLE's parameter sweep functionality for systematic optimization and analysis.
+This page provides detailed examples of using VINE's parameter sweep functionality for systematic optimization and analysis.
 
 Example 1: Learning Rate Optimization
 --------------------------------------
@@ -13,9 +13,9 @@ Setup
 
 .. code-block:: python
 
-   from maple.utils import PerformanceTracker, ParameterSweep
-   from maple.models import ModelConfig, PriorType
-   from maple.dataset import FEPDataset
+   from vine_fep.utils import PerformanceTracker, ParameterSweep
+   from vine_fep.models import ModelConfig, PriorType
+   from vine_fep.dataset import FEPDataset
    import numpy as np
    
    # Initialize tracking and data
@@ -435,7 +435,7 @@ Cross-Dataset Visualization
 Example 5: Error Handling and Failure Tracking
 -----------------------------------------------
 
-This example demonstrates how MAPLE's parameter sweep system gracefully handles parameter configurations that cause errors during training or evaluation.
+This example demonstrates how VINE's parameter sweep system gracefully handles parameter configurations that cause errors during training or evaluation.
 
 Robust Parameter Sweep
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -665,9 +665,9 @@ Best Practices for Robust Parameter Sweeps
        experiment_name='robust_lr_sweep'
    )
 
-These examples demonstrate the comprehensive failure tracking and error handling capabilities in MAPLE's parameter sweep system. The robust design ensures that parameter exploration can continue even when individual configurations fail, while providing detailed information about failures to help users understand and resolve issues.
+These examples demonstrate the comprehensive failure tracking and error handling capabilities in VINE's parameter sweep system. The robust design ensures that parameter exploration can continue even when individual configurations fail, while providing detailed information about failures to help users understand and resolve issues.
 
 Summary
 -------
 
-These examples demonstrate the full range of parameter sweep capabilities in MAPLE, from simple single-parameter optimization to complex cross-dataset studies with comprehensive error handling. The systematic approach ensures reproducible results and enables identification of robust parameter settings even in the presence of challenging parameter configurations.
+These examples demonstrate the full range of parameter sweep capabilities in VINE, from simple single-parameter optimization to complex cross-dataset studies with comprehensive error handling. The systematic approach ensures reproducible results and enables identification of robust parameter settings even in the presence of challenging parameter configurations.

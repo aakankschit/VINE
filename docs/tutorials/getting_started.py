@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.10"
 # dependencies = [
-#     "maple-fep",
+#     "vine-fep",
 #     "marimo",
 #     "matplotlib",
 #     "pandas",
@@ -19,9 +19,9 @@ app = marimo.App(width="medium")
 def _(mo):
     mo.md(
         r"""
-        # Getting Started with MAPLE-FEP
+        # Getting Started with VINE-FEP
 
-        **MAPLE (Maximum A Posteriori Learning of Energies)** is a Python package for analyzing Free Energy Perturbation (FEP) data using probabilistic node models and Bayesian inference.
+        **VINE** is a Python package for analyzing Free Energy Perturbation (FEP) data using probabilistic node models and Bayesian inference.
 
         This tutorial will walk you through:
 
@@ -49,7 +49,7 @@ def _(mo):
         r"""
         ## 1. Setting Up the Environment
 
-        First, let's import the necessary modules from MAPLE and set up our environment.
+        First, let's import the necessary modules from VINE and set up our environment.
         """
     )
     return
@@ -67,12 +67,12 @@ def _():
     import matplotlib.pyplot as plt
     import pyro
 
-    # MAPLE imports
-    from maple.dataset import FEPDataset, FEPBenchmarkDataset
-    from maple.models import VariationalEstimator, VariationalEstimatorConfig
-    from maple.models import PriorType, GuideType
-    from maple.graph_analysis import calculate_rmse, calculate_mae
-    from maple.graph_analysis import plot_dataset_DGs, plot_dataset_DDGs
+    # VINE imports
+    from vine_fep.dataset import FEPDataset, FEPBenchmarkDataset
+    from vine_fep.models import VariationalEstimator, VariationalEstimatorConfig
+    from vine_fep.models import PriorType, GuideType
+    from vine_fep.graph_analysis import calculate_rmse, calculate_mae
+    from vine_fep.graph_analysis import plot_dataset_DGs, plot_dataset_DDGs
 
     # Clear any previous Pyro state
     pyro.clear_param_store()
@@ -103,7 +103,7 @@ def _(mo):
         r"""
         ## 2. Loading Benchmark Data
 
-        MAPLE provides easy access to several FEP benchmark datasets from the Schindler et al. repository.
+        VINE provides easy access to several FEP benchmark datasets from the Schindler et al. repository.
 
         Available datasets include:
         - **cdk8** - Cyclin-dependent kinase 8
@@ -200,7 +200,7 @@ def _(mo):
         - **Nodes** represent ligands
         - **Edges** represent perturbations with computed ΔΔG values
 
-        MAPLE converts this to a graph format for inference:
+        VINE converts this to a graph format for inference:
         """
     )
     return
@@ -229,7 +229,7 @@ def _(mo):
         r"""
         ## 5. Training a VariationalEstimator
 
-        The **VariationalEstimator** is MAPLE's primary inference engine. It uses Bayesian inference to estimate absolute binding free energies (ΔG) from relative measurements (ΔΔG).
+        The **VariationalEstimator** is VINE's primary inference engine. It uses Bayesian inference to estimate absolute binding free energies (ΔG) from relative measurements (ΔΔG).
 
         We'll configure the model with:
         - **MAP inference** (Maximum A Posteriori) using `GuideType.AUTO_DELTA`
@@ -371,9 +371,9 @@ def _(calculate_mae, calculate_rmse, mo, np, results_df):
 def _(mo):
     mo.md(
         r"""
-        ## 8. Visualization with MAPLE's Built-in Plotting
+        ## 8. Visualization with VINE's Built-in Plotting
 
-        MAPLE provides specialized plotting functions for FEP analysis. Let's use `plot_dataset_DGs` to visualize our results with bootstrap confidence intervals:
+        VINE provides specialized plotting functions for FEP analysis. Let's use `plot_dataset_DGs` to visualize our results with bootstrap confidence intervals:
         """
     )
     return
@@ -381,7 +381,7 @@ def _(mo):
 
 @app.cell
 def _(dataset, plot_dataset_DGs):
-    # Use MAPLE's built-in plotting function for node (ΔG) data
+    # Use VINE's built-in plotting function for node (ΔG) data
     # This automatically handles mean-centering and computes bootstrap statistics
     fig_dg = plot_dataset_DGs(
         dataset,
@@ -445,7 +445,7 @@ def _(mo):
         r"""
         ## 9. Exploring the Dataset-Centric Design
 
-        One of MAPLE's key features is its **dataset-centric architecture**. Multiple models can add their predictions to the same dataset, making comparison easy:
+        One of VINE's key features is its **dataset-centric architecture**. Multiple models can add their predictions to the same dataset, making comparison easy:
         """
     )
     return
@@ -484,7 +484,7 @@ def _(mo):
         r"""
         ## 10. Next Steps
 
-        You've now learned the basics of MAPLE! Here are some things to explore next:
+        You've now learned the basics of VINE! Here are some things to explore next:
 
         ### Try Different Models
 
@@ -496,7 +496,7 @@ def _(mo):
         )
 
         # Gaussian Mixture VI (outlier detection)
-        from maple.models import GaussianMixtureVI, GaussianMixtureVIConfig
+        from vine_fep.models import GaussianMixtureVI, GaussianMixtureVIConfig
         gmvi_config = GaussianMixtureVIConfig(prior_std=5.0, outlier_prob=0.2)
         ```
 
@@ -513,7 +513,7 @@ def _(mo):
         ### Performance Tracking
 
         ```python
-        from maple.utils import PerformanceTracker
+        from vine_fep.utils import PerformanceTracker
 
         tracker = PerformanceTracker("./results")
         tracker.record_run(
@@ -524,7 +524,7 @@ def _(mo):
         )
         ```
 
-        For more details, check out the full [MAPLE documentation](https://maple-fep.readthedocs.io/).
+        For more details, check out the full [VINE documentation](https://vine-fep.readthedocs.io/).
         """
     )
     return

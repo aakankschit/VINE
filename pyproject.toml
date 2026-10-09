@@ -1,5 +1,5 @@
 # =============================================================================
-# MAPLE-FEP: Enhanced pyproject.toml for PyPI Publishing
+# VINE-FEP: Enhanced pyproject.toml for PyPI Publishing
 # =============================================================================
 # This is an improved version of pyproject.toml for the new package repository.
 # Key improvements:
@@ -15,9 +15,9 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "maple-fep"
-version = "0.1.1"
-description = "Maximum A Posteriori Learning of Energies - Bayesian inference tools for Free Energy Perturbation (FEP) calculations in computational drug discovery"
+name = "vine-fep"
+version = "0.2.0"
+description = "VINE: estimate absolute free energies from relative free energies (FEP) using Bayesian inference"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
@@ -133,19 +133,19 @@ notebook = [
 
 # All optional dependencies
 all = [
-    "maple-fep[dev,docs,notebook]",
+    "vine-fep[dev,docs,notebook]",
 ]
 
 [project.urls]
-Homepage = "https://github.com/aakankschit/maple-fep"
-Documentation = "https://maple-fep.readthedocs.io/"
-Repository = "https://github.com/aakankschit/maple-fep.git"
-Changelog = "https://github.com/aakankschit/maple-fep/blob/main/CHANGELOG.md"
-"Bug Tracker" = "https://github.com/aakankschit/maple-fep/issues"
+Homepage = "https://github.com/aakankschit/vine-fep"
+Documentation = "https://vine-fep.readthedocs.io/"
+Repository = "https://github.com/aakankschit/vine-fep.git"
+Changelog = "https://github.com/aakankschit/vine-fep/blob/main/CHANGELOG.md"
+"Bug Tracker" = "https://github.com/aakankschit/vine-fep/issues"
 
 # Optional: CLI entry point (uncomment if you want a command-line tool)
 # [project.scripts]
-# maple = "maple_fep.cli:main"
+# vine = "vine_fep.cli:main"
 
 # =============================================================================
 # Setuptools configuration
@@ -153,13 +153,13 @@ Changelog = "https://github.com/aakankschit/maple-fep/blob/main/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["maple_fep*"]
+include = ["vine_fep*", "maple_fep"]
 
 [tool.setuptools.package-dir]
 "" = "src"
 
 [tool.setuptools.package-data]
-maple_fep = ["py.typed"]  # PEP 561 marker for typed package
+vine_fep = ["py.typed"]  # PEP 561 marker for typed package
 
 # =============================================================================
 # Black - Code formatter
@@ -217,7 +217,7 @@ ignore = [
 "__init__.py" = ["F401"]  # Allow unused imports in __init__.py
 
 [tool.ruff.lint.isort]
-known-first-party = ["maple_fep"]
+known-first-party = ["vine_fep"]
 
 # =============================================================================
 # Pytest configuration
@@ -249,7 +249,7 @@ filterwarnings = [
 # =============================================================================
 
 [tool.coverage.run]
-source = ["src/maple_fep"]
+source = ["src/vine_fep"]
 branch = true
 parallel = true
 omit = [

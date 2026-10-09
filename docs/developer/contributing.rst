@@ -1,7 +1,7 @@
-Contributing to MAPLE
+Contributing to VINE
 ====================
 
-We welcome contributions to MAPLE! This guide provides information on how to contribute to the project.
+We welcome contributions to VINE! This guide provides information on how to contribute to the project.
 
 Development Setup
 -----------------
@@ -9,13 +9,13 @@ Development Setup
 Fork and Clone
 ~~~~~~~~~~~~~~
 
-1. Fork the MAPLE repository on GitHub
+1. Fork the VINE repository on GitHub
 2. Clone your fork locally:
 
 .. code-block:: bash
 
-   git clone https://github.com/your-username/MAPLE.git
-   cd MAPLE
+   git clone https://github.com/your-username/VINE.git
+   cd VINE
 
 Development Environment
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -24,8 +24,8 @@ Development Environment
 
 .. code-block:: bash
 
-   python -m venv maple-dev
-   source maple-dev/bin/activate  # On Windows: maple-dev\Scripts\activate
+   python -m venv vine-dev
+   source vine-dev/bin/activate  # On Windows: vine-dev\Scripts\activate
 
 2. Install in development mode:
 
@@ -52,7 +52,7 @@ Run tests with coverage:
 
 .. code-block:: bash
 
-   pytest tests/ --cov=maple --cov-report=html
+   pytest tests/ --cov=vine_fep --cov-report=html
 
 Code Style
 ----------
@@ -79,7 +79,7 @@ Type checking:
 
 .. code-block:: bash
 
-   mypy src/maple/
+   mypy src/vine_fep/
 
 Documentation
 -------------

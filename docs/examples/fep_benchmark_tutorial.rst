@@ -1,7 +1,7 @@
 FEP Benchmark Tutorial
 ======================
 
-This tutorial demonstrates how to use two key components of the MAPLE package:
+This tutorial demonstrates how to use two key components of the VINE package:
 
 1. **FEPBenchmarkDataset**: Loading and working with Free Energy Perturbation benchmark datasets
 2. **PerformanceTracker**: Tracking, storing, and comparing model performance across runs
@@ -9,7 +9,7 @@ This tutorial demonstrates how to use two key components of the MAPLE package:
 Setup and Imports
 ------------------
 
-Let's start by importing the necessary libraries and MAPLE components:
+Let's start by importing the necessary libraries and VINE components:
 
 .. code-block:: python
 
@@ -22,10 +22,10 @@ Let's start by importing the necessary libraries and MAPLE components:
    import warnings
    warnings.filterwarnings('ignore')
 
-   # MAPLE components
-   from maple.dataset.FEP_benchmark_dataset import FEPBenchmarkDataset
-   from maple.utils.performance_tracker import PerformanceTracker, ModelRun
-   from maple.graph_analysis.plotting_performance import plot_dataset_DGs, plot_dataset_DDGs
+   # VINE components
+   from vine_fep.dataset.FEP_benchmark_dataset import FEPBenchmarkDataset
+   from vine_fep.utils.performance_tracker import PerformanceTracker, ModelRun
+   from vine_fep.graph_analysis.plotting_performance import plot_dataset_DGs, plot_dataset_DDGs
 
    # Set up plotting style
    plt.style.use('seaborn-v0_8')
@@ -33,7 +33,7 @@ Let's start by importing the necessary libraries and MAPLE components:
    np.random.seed(42)
 
    print("✅ Imports completed successfully")
-   print("📦 MAPLE version: Available components loaded")
+   print("📦 VINE version: Available components loaded")
 
 FEP Benchmark Dataset Tutorial
 -------------------------------
@@ -48,7 +48,7 @@ The FEP benchmark includes 8 different protein targets with molecular dynamics d
 .. code-block:: python
 
    # Initialize the dataset handler
-   fep_dataset = FEPBenchmarkDataset(cache_dir="~/.maple_cache")
+   fep_dataset = FEPBenchmarkDataset(cache_dir="~/.vine_cache")
 
    print("🎯 Available FEP Benchmark Datasets:")
    for i, dataset_name in enumerate(fep_dataset.SUPPORTED_DATASETS, 1):
@@ -70,7 +70,7 @@ Output::
       8. tnks2
 
    📊 Available sampling times: 5ns, 20ns
-   📁 Cache directory: /Users/username/.maple_cache
+   📁 Cache directory: /Users/username/.vine_cache
 
 Loading a Dataset
 ~~~~~~~~~~~~~~~~~
@@ -417,4 +417,4 @@ Best Practices
    # Regular exports for backup
    tracker.export_results("backup.json", format="json")
 
-This tutorial demonstrates the core functionality of MAPLE's FEP benchmark dataset handling and performance tracking capabilities. These tools provide a solid foundation for systematic FEP analysis and model development.
+This tutorial demonstrates the core functionality of VINE's FEP benchmark dataset handling and performance tracking capabilities. These tools provide a solid foundation for systematic FEP analysis and model development.

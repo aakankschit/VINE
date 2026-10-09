@@ -1,9 +1,9 @@
-Models Package (``maple.models``)
+Models Package (``vine_fep.models``)
 ==================================
 
-The ``maple.models`` package provides statistical models for FEP analysis, organized into **probabilistic** (variational inference) and **deterministic** (closed-form) methods. All models follow the **dataset-centric pattern**: they read from a dataset, perform inference, and write predictions back to the dataset.
+The ``vine_fep.models`` package provides statistical models for FEP analysis, organized into **probabilistic** (variational inference) and **deterministic** (closed-form) methods. All models follow the **dataset-centric pattern**: they read from a dataset, perform inference, and write predictions back to the dataset.
 
-.. image:: ../MAPLE_logo.png
+.. image:: ../VINE_logo.png
    :align: center
    :width: 250px
 
@@ -36,7 +36,7 @@ Package Structure
 
 .. code-block:: text
 
-   maple.models/
+   vine_fep.models/
    ├── base.py                    # BaseEstimator ABC
    ├── config.py                  # All configuration classes + enums
    ├── graph_data.py              # GraphData dataclass
@@ -92,8 +92,8 @@ Quick Example
 
 .. code-block:: python
 
-   from maple.dataset import FEPDataset
-   from maple.models import (
+   from vine_fep.dataset import FEPDataset
+   from vine_fep.models import (
        VariationalEstimator, VariationalEstimatorConfig,
        GaussianMixtureVI, GaussianMixtureVIConfig,
        SpectralCorrection, SpectralCorrectionConfig,
@@ -231,7 +231,7 @@ Configuration
 
 .. code-block:: python
 
-   from maple.models import VariationalEstimatorConfig, PriorType, GuideType, ErrorDistributionType
+   from vine_fep.models import VariationalEstimatorConfig, PriorType, GuideType, ErrorDistributionType
 
    config = VariationalEstimatorConfig(
        # Optimization
@@ -259,8 +259,8 @@ Usage
 
 .. code-block:: python
 
-   from maple.models import VariationalEstimator, VariationalEstimatorConfig, PriorType, GuideType
-   from maple.dataset import FEPDataset
+   from vine_fep.models import VariationalEstimator, VariationalEstimatorConfig, PriorType, GuideType
+   from vine_fep.dataset import FEPDataset
 
    # Create dataset
    dataset = FEPDataset(dataset_name="cdk8", sampling_time="5ns")
@@ -326,7 +326,7 @@ Configuration
 
 .. code-block:: python
 
-   from maple.models import GaussianMixtureVIConfig
+   from vine_fep.models import GaussianMixtureVIConfig
 
    config = GaussianMixtureVIConfig(
        # Model parameters
@@ -350,8 +350,8 @@ Usage
 
 .. code-block:: python
 
-   from maple.models import GaussianMixtureVI, GaussianMixtureVIConfig
-   from maple.dataset import FEPDataset
+   from vine_fep.models import GaussianMixtureVI, GaussianMixtureVIConfig
+   from vine_fep.dataset import FEPDataset
 
    # Create dataset
    dataset = FEPDataset(dataset_name="cdk8", sampling_time="5ns")
@@ -405,7 +405,7 @@ Configuration
 
 .. code-block:: python
 
-   from maple.models import CycleClosureCorrectionConfig
+   from vine_fep.models import CycleClosureCorrectionConfig
 
    config = CycleClosureCorrectionConfig(
        tolerance=1e-6,       # Convergence tolerance
@@ -417,8 +417,8 @@ Usage
 
 .. code-block:: python
 
-   from maple.models import CycleClosureCorrection, CycleClosureCorrectionConfig
-   from maple.dataset import FEPDataset
+   from vine_fep.models import CycleClosureCorrection, CycleClosureCorrectionConfig
+   from vine_fep.dataset import FEPDataset
 
    # Create dataset
    dataset = FEPDataset(dataset_name="cdk8", sampling_time="5ns")
@@ -458,7 +458,7 @@ Configuration
 
 .. code-block:: python
 
-   from maple.models import SpectralCorrectionConfig
+   from vine_fep.models import SpectralCorrectionConfig
 
    config = SpectralCorrectionConfig(
        use_weights=True   # True for WSFC (weighted), False for SFC (unweighted)
@@ -469,8 +469,8 @@ Usage
 
 .. code-block:: python
 
-   from maple.models import SpectralCorrection, SpectralCorrectionConfig
-   from maple.dataset import FEPDataset
+   from vine_fep.models import SpectralCorrection, SpectralCorrectionConfig
+   from vine_fep.dataset import FEPDataset
 
    # Create dataset
    dataset = FEPDataset(dataset_name="cdk8", sampling_time="5ns")
@@ -500,7 +500,7 @@ Probabilistic Models
 VariationalEstimator
 ^^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: maple.models.VariationalEstimator
+.. autoclass:: vine_fep.models.VariationalEstimator
    :members:
    :undoc-members:
    :show-inheritance:
@@ -522,7 +522,7 @@ VariationalEstimator
 GaussianMixtureVI
 ^^^^^^^^^^^^^^^^^
 
-.. autoclass:: maple.models.GaussianMixtureVI
+.. autoclass:: vine_fep.models.GaussianMixtureVI
    :members:
    :undoc-members:
    :show-inheritance:
@@ -548,7 +548,7 @@ Deterministic Models
 CycleClosureCorrection
 ^^^^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: maple.models.CycleClosureCorrection
+.. autoclass:: vine_fep.models.CycleClosureCorrection
    :members:
    :undoc-members:
    :show-inheritance:
@@ -562,7 +562,7 @@ CycleClosureCorrection
 SpectralCorrection
 ^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: maple.models.SpectralCorrection
+.. autoclass:: vine_fep.models.SpectralCorrection
    :members:
    :undoc-members:
    :show-inheritance:
@@ -586,7 +586,7 @@ Configuration Classes
 VariationalEstimatorConfig
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: maple.models.VariationalEstimatorConfig
+.. autoclass:: vine_fep.models.VariationalEstimatorConfig
    :members:
    :undoc-members:
    :show-inheritance:
@@ -594,7 +594,7 @@ VariationalEstimatorConfig
 GaussianMixtureVIConfig
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: maple.models.GaussianMixtureVIConfig
+.. autoclass:: vine_fep.models.GaussianMixtureVIConfig
    :members:
    :undoc-members:
    :show-inheritance:
@@ -602,7 +602,7 @@ GaussianMixtureVIConfig
 CycleClosureCorrectionConfig
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: maple.models.CycleClosureCorrectionConfig
+.. autoclass:: vine_fep.models.CycleClosureCorrectionConfig
    :members:
    :undoc-members:
    :show-inheritance:
@@ -610,7 +610,7 @@ CycleClosureCorrectionConfig
 SpectralCorrectionConfig
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: maple.models.SpectralCorrectionConfig
+.. autoclass:: vine_fep.models.SpectralCorrectionConfig
    :members:
    :undoc-members:
    :show-inheritance:
@@ -618,7 +618,7 @@ SpectralCorrectionConfig
 BaseEstimatorConfig
 ^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: maple.models.BaseEstimatorConfig
+.. autoclass:: vine_fep.models.BaseEstimatorConfig
    :members:
    :undoc-members:
    :show-inheritance:
@@ -629,7 +629,7 @@ Configuration Enums
 PriorType
 ^^^^^^^^^
 
-.. autoclass:: maple.models.PriorType
+.. autoclass:: vine_fep.models.PriorType
    :members:
    :undoc-members:
 
@@ -644,7 +644,7 @@ Available options:
 GuideType
 ^^^^^^^^^
 
-.. autoclass:: maple.models.GuideType
+.. autoclass:: vine_fep.models.GuideType
    :members:
    :undoc-members:
 
@@ -656,7 +656,7 @@ Available options:
 ErrorDistributionType
 ^^^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: maple.models.ErrorDistributionType
+.. autoclass:: vine_fep.models.ErrorDistributionType
    :members:
    :undoc-members:
 
@@ -671,7 +671,7 @@ Data Structures
 GraphData
 ^^^^^^^^^
 
-.. autoclass:: maple.models.GraphData
+.. autoclass:: vine_fep.models.GraphData
    :members:
    :undoc-members:
    :show-inheritance:
@@ -698,7 +698,7 @@ Utility Functions
 create_config
 ^^^^^^^^^^^^^
 
-.. autofunction:: maple.models.create_config
+.. autofunction:: vine_fep.models.create_config
 
 Best Practices
 --------------

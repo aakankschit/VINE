@@ -1,17 +1,17 @@
 Basic Usage Examples
 ====================
 
-This page provides comprehensive examples of MAPLE's dataset-centric workflow patterns.
+This page provides comprehensive examples of VINE's dataset-centric workflow patterns.
 
 Core Concept: Dataset as Central Hub
 ------------------------------------
 
-MAPLE uses a dataset-centric architecture where the ``FEPDataset`` object serves as the central hub for all data and predictions:
+VINE uses a dataset-centric architecture where the ``FEPDataset`` object serves as the central hub for all data and predictions:
 
 .. code-block:: text
 
    +============================================================================+
-   |                      MAPLE WORKFLOW OVERVIEW                                |
+   |                      VINE WORKFLOW OVERVIEW                                |
    +============================================================================+
    
    +-------------+      +----------------+      +------------------+
@@ -32,11 +32,11 @@ Loading and Preparing Data
 From Benchmark Dataset
 ~~~~~~~~~~~~~~~~~~~~~~
 
-MAPLE includes standard FEP benchmark datasets:
+VINE includes standard FEP benchmark datasets:
 
 .. code-block:: python
 
-   from maple.dataset import FEPDataset
+   from vine_fep.dataset import FEPDataset
    
    # Load a benchmark dataset
    dataset = FEPDataset(dataset_name="cdk8", sampling_time="5ns")
@@ -62,7 +62,7 @@ From Your Own Data
 .. code-block:: python
 
    import pandas as pd
-   from maple.dataset import FEPDataset
+   from vine_fep.dataset import FEPDataset
    
    # Create edge DataFrame
    edges_df = pd.DataFrame({
@@ -88,7 +88,7 @@ From CSV Files
 
 .. code-block:: python
 
-   from maple.dataset import FEPDataset
+   from vine_fep.dataset import FEPDataset
    
    # Load from CSV files
    dataset = FEPDataset(
@@ -99,11 +99,11 @@ From CSV Files
 From Edges Only
 ~~~~~~~~~~~~~~~
 
-If you only have edge data, MAPLE can derive node values via graph traversal:
+If you only have edge data, VINE can derive node values via graph traversal:
 
 .. code-block:: python
 
-   from maple.dataset import FEPDataset
+   from vine_fep.dataset import FEPDataset
    
    # Only provide edges - nodes will be derived automatically
    dataset = FEPDataset(dataset_edges=edges_df)
@@ -123,8 +123,8 @@ MAP Inference with VariationalEstimator
 
 .. code-block:: python
 
-   from maple.dataset import FEPDataset
-   from maple.models import VariationalEstimator, VariationalEstimatorConfig, PriorType, GuideType
+   from vine_fep.dataset import FEPDataset
+   from vine_fep.models import VariationalEstimator, VariationalEstimatorConfig, PriorType, GuideType
 
    # Create dataset
    dataset = FEPDataset(dataset_name="cdk8", sampling_time="5ns")
@@ -157,7 +157,7 @@ Variational Inference with VariationalEstimator
 
 .. code-block:: python
 
-   from maple.models import VariationalEstimator, VariationalEstimatorConfig, PriorType, GuideType
+   from vine_fep.models import VariationalEstimator, VariationalEstimatorConfig, PriorType, GuideType
 
    # Configure VI (variational inference)
    vi_config = VariationalEstimatorConfig(
@@ -187,7 +187,7 @@ GMVI with Outlier Detection
 
 .. code-block:: python
 
-   from maple.models import GaussianMixtureVI, GaussianMixtureVIConfig
+   from vine_fep.models import GaussianMixtureVI, GaussianMixtureVIConfig
    
    # Configure GMVI
    gmvi_config = GaussianMixtureVIConfig(
@@ -224,13 +224,13 @@ Complete Multi-Model Workflow
 
 .. code-block:: python
 
-   from maple.dataset import FEPDataset
-   from maple.models import (
+   from vine_fep.dataset import FEPDataset
+   from vine_fep.models import (
        VariationalEstimator, VariationalEstimatorConfig,
        GaussianMixtureVI, GaussianMixtureVIConfig,
        PriorType, GuideType
    )
-   from maple.graph_analysis import compute_simple_statistics
+   from vine_fep.graph_analysis import compute_simple_statistics
    
    # ============================================================
    # STEP 1: Create dataset
@@ -480,10 +480,10 @@ Batch Processing Multiple Datasets
 
 .. code-block:: python
 
-   from maple.dataset import FEPDataset
-   from maple.models import VariationalEstimator, VariationalEstimatorConfig, GaussianMixtureVI, GaussianMixtureVIConfig
-   from maple.models import PriorType, GuideType
-   from maple.graph_analysis import compute_simple_statistics
+   from vine_fep.dataset import FEPDataset
+   from vine_fep.models import VariationalEstimator, VariationalEstimatorConfig, GaussianMixtureVI, GaussianMixtureVIConfig
+   from vine_fep.models import PriorType, GuideType
+   from vine_fep.graph_analysis import compute_simple_statistics
    
    # Define datasets to process
    datasets_to_process = [

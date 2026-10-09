@@ -18,12 +18,12 @@ from pathlib import Path
 import warnings
 warnings.filterwarnings('ignore')
 
-from maple.dataset import FEPBenchmarkDataset, FEPDataset
-from maple.models import (
-    GaussianMixtureVI, GaussianMixtureVIConfig, VariationalEstimator, VariationalEstimatorConfig,
+from vine_fep.dataset import FEPBenchmarkDataset, FEPDataset
+from vine_fep.models import (
+    MixtureVI, MixtureVIConfig, VariationalEstimator, VariationalEstimatorConfig,
     GuideType, PriorType, ErrorDistributionType
 )
-from maple.graph_analysis import bootstrap_statistic
+from vine_fep.graph_analysis import bootstrap_statistic
 
 # Set style for better plots
 plt.style.use('seaborn-v0_8-darkgrid')
@@ -68,24 +68,28 @@ def train_models(dataset, dataset_name):
     vi_model.add_predictions_to_dataset()
     print(f"   VI final loss: {vi_results['final_loss']:.4f}")
     
-    # 3. GMVI Model
-    print("\n3. Training GMVI Model...")
-    gmvi_config = GaussianMixtureVIConfig(
-        prior_std=1.0,          # Prior standard deviation for node values
-        normal_std=1.0,         # Standard deviation for normal edges
-        outlier_std=3.0,        # Standard deviation for outlier edges
-        outlier_prob=0.2,       # Probability of an edge being an outlier
-        kl_weight=0.1,          # Weight for KL divergence in ELBO
-        learning_rate=0.001,     # Learning rate for ADAM optimizer
-        n_epochs=5000,           # Number of training epochs
-        n_samples=1000,          # Monte Carlo samples for ELBO
-        patience=500             # Early stopping patience
+    # 3. MixtureVI (uses the OpenFE preset by default)
+    print("\n3. Training MixtureVI Model (OpenFE preset)...")
+    mvi_config = MixtureVIConfig(
+        kl_weight=0.1,
+        learning_rate=0.001,
+        n_epochs=5000,
+        n_samples=1000,
+        patience=500,
     )
-    gmvi_model = GaussianMixtureVI(config=gmvi_config, dataset=dataset)
-    gmvi_model.fit()
-    # Add GMVI predictions to dataset
-    gmvi_model.add_predictions_to_dataset()
-    print("   GMVI training complete")
+    mvi_model = MixtureVI(config=mvi_config, dataset=dataset)
+    mvi_model.fit()
+    mvi_model.add_predictions_to_dataset()
+    # Alias the MixtureVI columns under the legacy "GMVI" name so the
+    # downstream plotting code (which references "GMVI") keeps working.
+    mvi_suffix = mvi_model._suffix  # e.g. "VI(3,3)" for the OpenFE preset
+    for df in (dataset.dataset_edges, dataset.dataset_nodes):
+        if mvi_suffix in df.columns:
+            df["GMVI"] = df[mvi_suffix]
+            unc_col = f"{mvi_suffix}_uncertainty"
+            if unc_col in df.columns:
+                df["GMVI_uncertainty"] = df[unc_col]
+    print("   MixtureVI training complete")
 
     # 4. MLE Model (uses skewed normal error distribution)
     print("\n4. Training MLE Model...")
@@ -777,7 +781,7 @@ def collect_all_metrics(datasets, sampling_time, output_dir):
             
             # Load dataset
             print(f"Loading {dataset_name} dataset with {sampling_time} sampling...")
-            benchmark = FEPBenchmarkDataset(cache_dir="~/.maple_cache")
+            benchmark = FEPBenchmarkDataset(cache_dir="~/.vine_cache")
             edge_df, node_df = benchmark.get_dataset(dataset_name, sampling_time)
             dataset = FEPDataset(dataset_nodes=node_df, dataset_edges=edge_df)
             
@@ -892,7 +896,7 @@ def process_dataset(dataset_name, sampling_time, output_dir):
         
         # Load dataset
         print(f"Loading {dataset_name} dataset with {sampling_time} sampling...")
-        benchmark = FEPBenchmarkDataset(cache_dir="~/.maple_cache")
+        benchmark = FEPBenchmarkDataset(cache_dir="~/.vine_cache")
         edge_df, node_df = benchmark.get_dataset(dataset_name, sampling_time)
         dataset = FEPDataset(dataset_nodes=node_df, dataset_edges=edge_df)
         

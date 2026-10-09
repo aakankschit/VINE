@@ -17,7 +17,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from maple_fep.models import (
+from vine_fep.models import (
     GraphData,
     VariationalEstimator,
     VariationalEstimatorConfig,
@@ -178,6 +178,7 @@ class TestSFCEqualsMLE:
             num_steps=5000,
             learning_rate=0.03,
             patience=200,
+            random_seed=0,
         )
         mle_model = VariationalEstimator(config=mle_config, dataset=mock_dataset)
         mle_model.fit()
@@ -367,7 +368,7 @@ class TestGraphDataShared:
     """Verify GraphData from shared module works across models."""
 
     def test_import_from_models(self):
-        from maple_fep.models import GraphData as GD
+        from vine_fep.models import GraphData as GD
         assert GD is GraphData
 
     def test_optional_fields_default_none(self):

@@ -1,12 +1,12 @@
 Parameter Optimization Guide
 ============================
 
-This guide provides comprehensive approaches for investigating parameter effects on model performance in MAPLE, including systematic parameter sweeps, optimization, and visualization techniques.
+This guide provides comprehensive approaches for investigating parameter effects on model performance in VINE, including systematic parameter sweeps, optimization, and visualization techniques.
 
 Overview
 --------
 
-The MAPLE parameter investigation system offers multiple approaches for exploring how different parameters affect model performance:
+The VINE parameter investigation system offers multiple approaches for exploring how different parameters affect model performance:
 
 1. **Direct Replication** - Exact recreation of existing analysis workflows
 2. **Parameter Sweeps** - Systematic exploration of individual parameters  
@@ -21,7 +21,7 @@ Simple Parameter Sweep
 
 .. code-block:: python
 
-   from maple.utils import ParameterSweep, PerformanceTracker
+   from vine_fep.utils import ParameterSweep, PerformanceTracker
    
    tracker = PerformanceTracker("./results")
    sweep = ParameterSweep(tracker, base_config, datasets)
@@ -41,7 +41,7 @@ Direct Notebook Replication
 
 .. code-block:: python
 
-   from maple.utils import create_prior_sweep_experiment
+   from vine_fep.utils import create_prior_sweep_experiment
    
    # Replicate existing notebook analysis
    results = create_prior_sweep_experiment(
@@ -274,7 +274,7 @@ Bayesian Optimization
 .. code-block:: python
 
    # Advanced Bayesian optimization (requires additional packages)
-   from maple.utils.optimization import BayesianOptimizer
+   from vine_fep.utils.optimization import BayesianOptimizer
    
    optimizer = BayesianOptimizer(
        objective_function=sweep.evaluate_config,
@@ -387,7 +387,7 @@ Statistical Considerations
 Convenience Functions
 --------------------
 
-For common workflows, MAPLE provides high-level convenience functions:
+For common workflows, VINE provides high-level convenience functions:
 
 Prior Parameter Study
 ~~~~~~~~~~~~~~~~~~~~~
@@ -422,7 +422,7 @@ Comprehensive Parameter Study
 Error Handling and Failure Tracking
 -----------------------------------
 
-MAPLE's parameter sweep system includes robust error handling that allows exploration to continue even when individual parameter combinations fail:
+VINE's parameter sweep system includes robust error handling that allows exploration to continue even when individual parameter combinations fail:
 
 Automatic Failure Tracking
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~

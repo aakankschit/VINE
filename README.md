@@ -1,42 +1,42 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/aakankschit/MAPLE-fep/main/docs/MAPLE_logo.png" alt="MAPLE Logo" width="400"/>
+  <img src="https://raw.githubusercontent.com/aakankschit/VINE/main/docs/VINE_logo.png" alt="VINE Logo" width="400"/>
 </p>
 
-<h1 align="center">MAPLE-fep</h1>
+<h1 align="center">VINE</h1>
 
 <p align="center">
-  <strong>Maximum A Posteriori Learning of Energies</strong>
+  <strong>A framework to estimate absolute free energies from relative free energies using Bayesian inference</strong>
 </p>
 
 <p align="center">
-  <a href="https://pypi.org/project/maple-fep/"><img src="https://img.shields.io/pypi/v/maple-fep.svg" alt="PyPI version"></a>
-  <a href="https://github.com/aakankschit/MAPLE-fep/actions/workflows/ci.yml"><img src="https://github.com/aakankschit/MAPLE-fep/actions/workflows/ci.yml/badge.svg" alt="CI/CD Pipeline"></a>
-  <a href="https://maple-fep.readthedocs.io/en/latest/?badge=latest"><img src="https://readthedocs.org/projects/maple-fep/badge/?version=latest" alt="Documentation Status"></a>
+  <a href="https://pypi.org/project/vine-fep/"><img src="https://img.shields.io/pypi/v/vine-fep.svg" alt="PyPI version"></a>
+  <a href="https://github.com/aakankschit/VINE/actions/workflows/ci.yml"><img src="https://github.com/aakankschit/VINE/actions/workflows/ci.yml/badge.svg" alt="CI/CD Pipeline"></a>
+  <a href="https://vine-fep.readthedocs.io/en/latest/?badge=latest"><img src="https://readthedocs.org/projects/vine-fep/badge/?version=latest" alt="Documentation Status"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.10+-blue.svg" alt="Python 3.10+"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
 </p>
 
 ---
 
-A Python package for Bayesian analysis of Free Energy Perturbation (FEP) calculations in computational drug discovery. MAPLE provides probabilistic and deterministic inference methods to correct thermodynamic inconsistencies and detect outliers in FEP perturbation graphs.
+A Python package for Bayesian analysis of Free Energy Perturbation (FEP) calculations in computational drug discovery. VINE provides probabilistic and deterministic inference methods to correct thermodynamic inconsistencies and detect outliers in FEP perturbation graphs.
 
 ## Installation
 
 ```bash
 # From PyPI
-pip install maple-fep
+pip install vine-fep
 
 # From source (development)
-git clone https://github.com/aakankschit/MAPLE-fep.git
-cd MAPLE-fep
+git clone https://github.com/aakankschit/VINE.git
+cd VINE
 pip install -e ".[dev]"
 ```
 
 ## Quick Start
 
 ```python
-from maple_fep.models import GaussianMixtureVI, GaussianMixtureVIConfig
-from maple_fep.dataset import FEPDataset
+from vine_fep.models import GaussianMixtureVI, GaussianMixtureVIConfig
+from vine_fep.dataset import FEPDataset
 
 # Load your FEP data
 dataset = FEPDataset("fep_edges.csv")
@@ -100,17 +100,17 @@ outlier_probs = model.compute_edge_outlier_probabilities()
 
 | Module | Description |
 |--------|-------------|
-| `maple_fep.models.probabilistic` | Bayesian estimators: `VariationalEstimator` (MAP/VI/MLE), `GaussianMixtureVI` |
-| `maple_fep.models.deterministic` | Graph-based methods: `CycleClosureCorrection` (WCC), `SpectralCorrection` (WSFC/SFC) |
-| `maple_fep.models.config` | Pydantic configuration classes for all models |
-| `maple_fep.dataset` | Dataset loading (`FEPDataset`), benchmarks (`FEPBenchmarkDataset`), synthetic data |
-| `maple_fep.graph_analysis` | Performance statistics, visualization, graph construction, cycle analysis |
-| `maple_fep.utils` | Parameter optimization (`ParameterSweep`), performance tracking |
+| `vine_fep.models.probabilistic` | Bayesian estimators: `VariationalEstimator` (MAP/VI/MLE), `GaussianMixtureVI` |
+| `vine_fep.models.deterministic` | Graph-based methods: `CycleClosureCorrection` (WCC), `SpectralCorrection` (WSFC/SFC) |
+| `vine_fep.models.config` | Pydantic configuration classes for all models |
+| `vine_fep.dataset` | Dataset loading (`FEPDataset`), benchmarks (`FEPBenchmarkDataset`), synthetic data |
+| `vine_fep.graph_analysis` | Performance statistics, visualization, graph construction, cycle analysis |
+| `vine_fep.utils` | Parameter optimization (`ParameterSweep`), performance tracking |
 
 ## Documentation
 
-- **[User Guide](https://maple-fep.readthedocs.io/)**: Installation, tutorials, examples
-- **[API Reference](https://maple-fep.readthedocs.io/api/)**: Detailed module documentation
+- **[User Guide](https://vine-fep.readthedocs.io/)**: Installation, tutorials, examples
+- **[API Reference](https://vine-fep.readthedocs.io/api/)**: Detailed module documentation
 - **[Examples](examples/)**: Jupyter notebooks and scripts
 
 Build documentation locally:
@@ -129,7 +129,7 @@ pip install -e ".[dev]"
 pytest tests/ -v
 
 # Run tests with coverage
-pytest tests/ --cov=src/maple_fep --cov-report=html
+pytest tests/ --cov=src/vine_fep --cov-report=html
 
 # Format code
 black src/ tests/
@@ -138,7 +138,7 @@ ruff check src/ tests/
 
 ## References
 
-MAPLE implements methods from the following publications:
+VINE implements methods from the following publications:
 
 - **WCC**: Li, Y.; Liu, R.; Liu, J.; Luo, H.; Wu, C.; Li, Z. An Open Source Graph-Based Weighted Cycle Closure Method for Relative Binding Free Energy Calculations. *J. Chem. Inf. Model.* **2023**, *63*, 561--570. [DOI: 10.1021/acs.jcim.2c01076](https://doi.org/10.1021/acs.jcim.2c01076)
 
@@ -146,14 +146,14 @@ MAPLE implements methods from the following publications:
 
 ## Citation
 
-If you use MAPLE in your research, please cite:
+If you use VINE in your research, please cite:
 
 ```bibtex
-@software{maple_fep_2025,
-  title={MAPLE: Maximum A Posteriori Learning of Energies},
+@software{vine_fep_2025,
+  title={VINE: A framework to estimate absolute free energies from relative free energies using Bayesian inference},
   author={Nandkeolyar, Aakankschit},
   year={2025},
-  url={https://github.com/aakankschit/MAPLE-fep},
+  url={https://github.com/aakankschit/VINE},
 }
 ```
 

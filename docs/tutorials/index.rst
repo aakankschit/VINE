@@ -1,7 +1,7 @@
 Interactive Tutorials
 =====================
 
-These interactive tutorials demonstrate MAPLE's capabilities using real benchmark datasets.
+These interactive tutorials demonstrate VINE's capabilities using real benchmark datasets.
 The tutorials are built with `Marimo <https://marimo.io/>`_, a modern reactive Python notebook.
 
 .. note::
@@ -17,7 +17,7 @@ The tutorials are built with `Marimo <https://marimo.io/>`_, a modern reactive P
 Getting Started Tutorial
 ------------------------
 
-This tutorial walks you through the basics of MAPLE:
+This tutorial walks you through the basics of VINE:
 
 - Loading benchmark FEP datasets
 - Understanding the data structure (nodes and edges)
@@ -41,12 +41,42 @@ The tutorial uses the **CDK8 (Cyclin-dependent kinase 8)** benchmark dataset to 
 4. **Analysis**: Calculating RMSE, MAE, and correlation metrics
 5. **Visualization**: Creating correlation plots
 
+Complete Model Comparison Tutorial
+------------------------------------
+
+This tutorial applies **all six correction methods** to a single benchmark dataset and compares their performance:
+
+- **MLE** — Maximum Likelihood Estimation (uniform prior, no regularization)
+- **MAP** — Maximum A Posteriori (Normal prior regularization)
+- **VI** — Variational Inference (full posterior with uncertainties)
+- **GMVI** — Gaussian Mixture VI (outlier-robust inference)
+- **WCC** — Weighted Cycle Closure (iterative deterministic correction)
+- **WSFC** — Weighted Spectral Free-energy Correction (graph Laplacian)
+
+.. raw:: html
+
+   <div style="margin: 2em 0;">
+   <a href="model_comparison.html" class="btn btn-primary" style="padding: 10px 20px; background-color: #2980b9; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+   View Model Comparison Tutorial
+   </a>
+   </div>
+
+The tutorial covers:
+
+1. **Data exploration**: Loading CDK8 benchmark data and visualizing the perturbation graph
+2. **Model fitting**: Configuring and running all six correction methods
+3. **Performance comparison**: Correlation plots, bar charts, and bootstrap statistics
+4. **Outlier detection**: Using GMVI to identify problematic FEP edges
+5. **Graph analysis**: Cycle closure errors and edge leverages
+
+
 Source Files
 ------------
 
 The Marimo notebook source files are available in the repository:
 
-- `getting_started.py <https://github.com/aakankschit/maple-fep/blob/main/docs/tutorials/getting_started.py>`_ - Getting Started Tutorial
+- `getting_started.py <https://github.com/aakankschit/vine-fep/blob/main/docs/tutorials/getting_started.py>`_ - Getting Started Tutorial
+- `model_comparison.py <https://github.com/aakankschit/vine-fep/blob/main/docs/tutorials/model_comparison.py>`_ - Complete Model Comparison Tutorial
 
 
 Running Tutorials Locally
@@ -54,11 +84,11 @@ Running Tutorials Locally
 
 To run tutorials interactively:
 
-1. Install MAPLE with notebook dependencies:
+1. Install VINE with notebook dependencies:
 
    .. code-block:: bash
 
-      pip install maple-fep[notebook]
+      pip install vine-fep[notebook]
 
 2. Navigate to the tutorials directory:
 
@@ -70,6 +100,6 @@ To run tutorials interactively:
 
    .. code-block:: bash
 
-      marimo edit getting_started.py
+      marimo edit model_comparison.py
 
 This will open an interactive notebook in your browser where you can modify code and see results update reactively.

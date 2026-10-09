@@ -2,14 +2,14 @@
 Unit tests for the performance statistics module.
 
 This module tests all statistical functions used for evaluating model performance
-in the MAPLE package, including error metrics, correlation measures, and
+in the VINE package, including error metrics, correlation measures, and
 bootstrap sampling functionality.
 """
 
 import numpy as np
 import pytest
 
-from maple_fep.graph_analysis.performance_stats import (bootstrap_statistic,
+from vine_fep.graph_analysis.performance_stats import (bootstrap_statistic,
                                                     calculate_correlation,
                                                     calculate_mae,
                                                     calculate_r2,
